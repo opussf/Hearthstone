@@ -1,0 +1,11 @@
+## Interface: @INTERFACE@
+## Title: HearthStone
+## Notes:
+## Author: opussf
+## Version: @VERSION@
+## Description:
+## SavedVariables: HS_log
+## SavedVariablesPerCharacter:
+
+HearthStone.lua
+HearthStone.xml
