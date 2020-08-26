@@ -32,4 +32,13 @@ function HS.OnLoad()
 	HSFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
 end
 function HS.PLAYER_ENTERING_WORLD()
+	HS.LogMsg( "arg1: "..( arg1 or "nil" ), true )
+
+	if( type( arg2 ) == "table" ) then
+		HS.LogMsg( "Arg2 is a table.", true )
+		for k in pairs( arg2 ) do
+			HS.LogMsg( "arg2["..k.."]: ", true )
+		end
+	end
+	HS.LogMsg( "arg3: "..( arg3 or "nil" ), true )
 end
