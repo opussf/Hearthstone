@@ -1,6 +1,6 @@
 HS_MSG_ADDONNAME, HS = ...   -- is given the name and a table
-HS_MSG_VERSION   = GetAddOnMetadata( HS_MSG_ADDONNAME,"Version" )
-HS_MSG_AUTHOR    = "opussf"
+HS_MSG_VERSION   = GetAddOnMetadata( HS_MSG_ADDONNAME, "Version" )
+HS_MSG_AUTHOR    = GetAddOnMetadata( HS_MSG_ADDONNAME, "Author" )
 
 COLOR_RED = "|cffff0000";
 COLOR_GREEN = "|cff00ff00";
@@ -13,6 +13,7 @@ COLOR_GOLD = "|cffcfb52b";
 COLOR_NEON_BLUE = "|cff4d4dff";
 COLOR_END = "|r";
 
+-- saved log file
 HS_log = {}
 
 function HS.Print( msg, showName )
