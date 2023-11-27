@@ -17,8 +17,26 @@ ParseTOC( "../src/HearthStone.toc" )
 -- addon setup
 
 function test.before()
+	HS_settings = {
+		["normal"] = {"6948"}
+	}
 end
 function test.after()
+end
+function test.test_add_normal_link()
+	HS.Command( "add |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
+	assertEquals( "165670", HS_settings.normal[2] )
+end
+function test.test_add_alt_shift_link()
+	HS.Command( "add alt-shift |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
+	assertEquals( "165670", HS_settings["alt-shift"][1] )
+end
+function test.test_add_normal_nolink()
+	HS.Command( "add" )
+end
+function test.test_remove_normal()
+	HS.Command( "remove |cffffffff|Hitem:6948::::::::70:258:::::::::|h[Hearthstone]|h|r" )
+	assertEquals( 0, #HS_settings.normal )
 end
 
 test.run()
