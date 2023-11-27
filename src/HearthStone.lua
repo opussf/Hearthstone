@@ -63,10 +63,10 @@ function HS.OnLoad()
 	-- HSFrame:RegisterEvent( "TOYS_UPDATED" )
 end
 function HS.NEW_TOY_ADDED()
-	HS.LogMsg( "NEW_TOY_ADDED", true )
+	HS.LogMsg( "NEW_TOY_ADDED", HS_settings.debug )
 end
 function HS.TOYS_UPDATED()
-	HS.LogMsg( "TOYS_UPDATED - This seems to be frequent.", true )
+	HS.LogMsg( "TOYS_UPDATED - This seems to be frequent.", HS_settings.debug )
 end
 function HS.PLAYER_ENTERING_WORLD()
 	HS.PruneLog()
@@ -74,7 +74,7 @@ function HS.PLAYER_ENTERING_WORLD()
 end
 function HS.UpdateMacro()
 	-- Updates / Creates macro
-	HS.LogMsg( "Update Macro", true )
+	HS.LogMsg( "Update Macro", HS_settings.debug )
 	if not HS_settings.macroname then
 		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
 		return
@@ -107,16 +107,16 @@ function HS.UpdateMacro()
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
-		HS.LogMsg( string.format( HS.L["There is no #HS in the %s macro."], HS_settings.macroname ), true)
+		HS.LogMsg( string.format( HS.L["There is no #HS in the %s macro."], HS_settings.macroname ), HS_settings.debug)
 	end
 	-- Edit or create the macro
 	macroText = table.concat( macroTable, "\n" )
 	if strlen(macroText) <= 255 then
 		if macroName then
-			HS.LogMsg( "Edit macro", true )
+			HS.LogMsg( "Edit macro", HS_settings.debug )
 			EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, macroText )
 		else
-			HS.LogMsg( "Create macro", true )
+			HS.LogMsg( "Create macro", HS_settings.debug )
 			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
 		end
 	else
@@ -125,8 +125,8 @@ function HS.UpdateMacro()
 end
 function HS.ScanToys()
 	-- write this better.
-	HS.LogMsg( "You have "..C_ToyBox.GetNumToys().." toys.", true )
-	HS.LogMsg( "Showing "..C_ToyBox.GetNumFilteredToys().." toys.", true )
+	HS.LogMsg( "You have "..C_ToyBox.GetNumToys().." toys.", HS_settings.debug )
+	HS.LogMsg( "Showing "..C_ToyBox.GetNumFilteredToys().." toys.", HS_settings.debug )
 
 	for i=1, C_ToyBox.GetNumFilteredToys() do
 		local itemID = C_ToyBox.GetToyFromIndex(i)
@@ -143,10 +143,28 @@ function HS.GetItemFromList( list )
 			HS.LogMsg( "Only 1 item found in given list: "..list[1] )
 			returnItem = list[1]
 		else
-			-- local randID,
-			local r = random(#list)
-			HS.LogMsg( "Picking "..r.."/"..#list, true )
-			returnItem = list[r]
+			local r
+			local limit = #list * 10 -- give it a while to choose
+			local count = 0
+			while( not r and count <= limit ) do
+				r = random(#list)
+				HS.LogMsg( "Picking "..r.."/"..#list.." ("..list[r]..")", HS_settings.debug )
+				count = count + 1
+				if list[r] == "6948" then
+					HS.LogMsg("HearthStone",HS_settings.debug)
+					r = (GetItemCount(list[r]) == 1 and r or nil) -- HearthStone is an item, clear the selection if not in bags
+				else
+					HS.LogMsg( "PlayerHasToy: "..(PlayerHasToy(list[r]) and "true" or "false" ), HS_settings.debug)
+					HS.LogMsg( "IsToyUsable : "..(C_ToyBox.IsToyUsable(list[r]) and "true" or "false"), HS_settings.debug)
+					if not PlayerHasToy(list[r]) or not C_ToyBox.IsToyUsable(list[r]) then
+						r = nil
+					end
+				end
+			end
+			if r then
+				HS.LogMsg( "Choise of "..r.." is valid." )
+				returnItem = list[r]
+			end
 		end
 		if returnItem then
 			return( "item:"..returnItem )
@@ -180,10 +198,10 @@ function HS.Add( inParams )
 	-- takes optional mod string, link, to add or list
 	-- defaults to 'normal' for mod string
 	-- if the link is empty, list for that mod string.
-	HS.LogMsg( "Add: >"..inParams.."<", true )
+	HS.LogMsg( "Add: >"..inParams.."<", HS_settings.debug )
 	local modIn, linkIn, itemID = nil
 	for item in string.gmatch( inParams, '[^%s]+' ) do
-		HS.LogMsg( item, true )
+		HS.LogMsg( item, HS_settings.debug )
 		for _, modTest in ipairs( HS.modOrder ) do
 			if item == modTest then
 				modIn = item
@@ -197,38 +215,40 @@ function HS.Add( inParams )
 	if not modIn then
 		modIn = "normal"
 	end
-	HS.LogMsg( "modIn : "..modIn, true )
-	HS.LogMsg( "linkIn: "..(linkIn or "no link in"), true )
+	HS.LogMsg( "modIn : "..modIn, HS_settings.debug )
+	HS.LogMsg( "linkIn: "..(linkIn or "no link in"), HS_settings.debug )
 
 	if linkIn then
 		itemID = HS.GetItemIdFromLink( linkIn )
-		HS.LogMsg( "Adding "..linkIn.." to "..modIn, true )
+		HS.LogMsg( "Adding "..linkIn.." to "..modIn, HS_settings.debug )
 		if HS_settings[modIn] then
 			table.insert( HS_settings[modIn], itemID )
 		else
 			HS_settings[modIn] = {itemID}
 		end
 		HS.UpdateMacro()
-	else
-		if HS_settings[modIn] then
-			HS.Print( string.format( HS.L["Items for mod: %s"], modIn ) )
-			for _, itemID in ipairs( HS_settings[modIn] ) do
-				itemLink = select( 2, GetItemInfo( itemID ) )
-				HS.Print( ( itemLink or "nil" ) )
-			end
-		else
-			HS.Print( string.format( HS.L["No items for mod: %s"], modIn ) )
-		end
 	end
+
+	-- Print for given mod
+	if HS_settings[modIn] then
+		HS.Print( string.format( HS.L["Items for mod: %s"], modIn ) )
+		for _, itemID in ipairs( HS_settings[modIn] ) do
+			itemLink = select( 2, GetItemInfo( itemID ) )
+			HS.Print( ( itemLink or "nil" ) )
+		end
+	else
+		HS.Print( string.format( HS.L["No items for mod: %s"], modIn ) )
+	end
+
 end
 function HS.Remove( inParams )
 	-- takes optional mod string, link, to add or list
 	-- defaults to 'normal' for mod string
 	-- if the link is empty, list for that mod string.
-	HS.LogMsg( "Add: >"..inParams.."<", true )
+	HS.LogMsg( "Add: >"..inParams.."<", HS_settings.debug )
 	local modIn, linkIn, itemID = nil
 	for item in string.gmatch( inParams, '[^%s]+' ) do
-		HS.LogMsg( item, true )
+		HS.LogMsg( item, HS_settings.debug )
 		for _, modTest in ipairs( HS.modOrder ) do
 			if item == modTest then
 				modIn = item
@@ -242,8 +262,8 @@ function HS.Remove( inParams )
 	if not modIn then
 		modIn = "normal"
 	end
-	HS.LogMsg( "modIn : "..modIn, true )
-	HS.LogMsg( "linkIn: "..(linkIn or "no link in"), true )
+	HS.LogMsg( "modIn : "..modIn, HS_settings.debug )
+	HS.LogMsg( "linkIn: "..(linkIn or "no link in"), HS_settings.debug )
 
 	if linkIn then
 		itemID = HS.GetItemIdFromLink( linkIn )
@@ -327,5 +347,9 @@ HS.CommandList = {
 	[HS.L["remove"]] = {
 		["func"] = HS.Remove,
 		["help"] = {HS.L["<mods>"].." "..HS.L["<link>"], HS.L["Remove toy from a modifier"]}
+	},
+	[HS.L["debug"]] = {
+		["func"] = function() HS_settings.debug = true; end,
+		["help"] = {"", "SetDebug on"}
 	},
 }
