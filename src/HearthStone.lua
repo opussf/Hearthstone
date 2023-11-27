@@ -21,8 +21,8 @@ HS_settings = {
 	["alt-shift"] = {"item:140192"},
 	--["alt"] = {"Garrison Hearthstone"},
 	["alt"] = {"item:110560"},
-	["normal"] =  {"item:6948", "item:166747", "item:162973", "item:172179"},
-	["macroname"] = "HS"
+	["normal"] =  {"item:6948", "item:166747", "item:162973", "item:172179", "item:193588"},
+	["macroname"] = "Hearth"
 }
 HS.modOrder = {
 	"alt-shift", "alt"
@@ -47,58 +47,56 @@ function HS.LogMsg( msg, alsoPrint )
 	--table.insert( HS_log, { [time()] = msg } )
 	if( alsoPrint ) then HS.Print( msg ); end
 end
-function HS.OnLoad()
-	HSFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
-end
-function HS.PLAYER_ENTERING_WORLD()
+function HS.PruneLog()
 	local now = time()
-	--math.randomseed(now)
 	for ts,_ in pairs( HS_log ) do
 		if ts + 3600 < now then
 			HS_log[ts] = nil
 		end
 	end
-	HS.LogMsg( "arg1: "..( arg1 or "nil" ), true )
+end
+function HS.OnLoad()
+	SLASH_HS1 = "/hs";
+	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
 
-	if( type( arg2 ) == "table" ) then
-		HS.LogMsg( "Arg2 is a table.", true )
-		for k in pairs( arg2 ) do
-			HS.LogMsg( "arg2["..k.."]: ", true )
-		end
+	HSFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
+	HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
+	HSFrame:RegisterEvent( "TOYS_UPDATED" )
+end
+function HS.NEW_TOY_ADDED()
+	HS.LogMsg( "NEW_TOY_ADDED", true )
+end
+function HS.TOYS_UPDATED()
+	HS.LogMsg( "TOYS_UPDATED - This seems to be frequent.", true )
+end
+function HS.PLAYER_ENTERING_WORLD()
+	HS.PruneLog()
+	HS.UpdateMacro()
+end
+function HS.UpdateMacro()
+	-- Updates / Creates macro
+	HS.LogMsg( "Update Macro", true )
+	if not HS_settings.macroname then
+		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
+		return
 	end
-	HS.LogMsg( "arg3: "..( arg3 or "nil" ), true )
+	local macroName, _, macroText = GetMacroInfo( HS_settings.macroname )
 
-
-	HS.LogMsg( "You have "..C_ToyBox.GetNumToys().." toys.", true )
-	HS.LogMsg( "Showing "..C_ToyBox.GetNumFilteredToys().." toys.", true )
-
-	for i=1, C_ToyBox.GetNumFilteredToys() do
-		local itemID = C_ToyBox.GetToyFromIndex(i)
-		if itemID then
-			_, toyName, _, isFavorite, hasFanfare, itemQuality = C_ToyBox.GetToyInfo( itemID )
-			HS.LogMsg( "item:"..itemID.." >"..toyName..": "..(isFavorite and "fav" or "meh")..": "..(hasFanfare and "fanfare" or "boring"))
-		end
-	end
-
-	local a, b, text = GetMacroInfo( HS_settings.macroname )
-	HS.LogMsg( "a: "..(a or "nil") )
-	HS.LogMsg( "b: "..(b or "nil") )
-	HS.LogMsg( "text: "..(text or "nil") )
-
+	-- build a table from the macro text to be able to update
 	macroTable = {}
-	if a then
-		HS.ListToTable( text, macroTable )
+	if macroName then
+		HS.ListToTable( macroText, macroTable )
 	else
-		macroTable = {"#showtooltip","#HS","/use"}
+		macroTable = {"#showtooltip","#HS","/use"}  -- simple macro to create if no macro by name given.
 	end
 	-- look for #HS and replace the following line
 	for lnum, line in ipairs( macroTable ) do
-		HS.LogMsg( lnum.."> "..line, true )
+		HS.LogMsg( lnum.."> "..line )
 		if strfind( string.upper(line), "#HS" ) then
 			hsLineNum = lnum + 1
 		end
 	end
-
+	-- Use modOrder to create a /use line, and replace / insert into the macroTable
 	if hsLineNum then
 		hsLine = "/use"
 		for _, modKey in ipairs( HS.modOrder ) do
@@ -110,18 +108,30 @@ function HS.PLAYER_ENTERING_WORLD()
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
-		HS.LogMsg( "There is no #HS in the "..HS_settings.macroname.." macro.", true)
+		HS.LogMsg( string.format( HS.L["There is no #HS in the %s macro."], HS_settings.macroname ), true)
 	end
-
+	-- Edit or create the macro
 	macroText = table.concat( macroTable, "\n" )
 	if a then
-		HS.LogMsg( "Edit macro" )
+		HS.LogMsg( "Edit macro", true )
 		EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, table.concat( macroTable, "\n" ) )
 	else
-		HS.LogMsg( "Create macro" )
+		HS.LogMsg( "Create macro", true )
 		CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", table.concat( macroTable, "\n" ) )
 	end
+end
+function HS.ScanToys()
+	-- write this better.
+	HS.LogMsg( "You have "..C_ToyBox.GetNumToys().." toys.", true )
+	HS.LogMsg( "Showing "..C_ToyBox.GetNumFilteredToys().." toys.", true )
 
+	for i=1, C_ToyBox.GetNumFilteredToys() do
+		local itemID = C_ToyBox.GetToyFromIndex(i)
+		if itemID then
+			_, toyName, _, isFavorite, hasFanfare, itemQuality = C_ToyBox.GetToyInfo( itemID )
+			HS.LogMsg( "item:"..itemID.." >"..toyName..": "..(isFavorite and "fav" or "meh")..": "..(hasFanfare and "fanfare" or "boring"))
+		end
+	end
 end
 function HS.GetItemFromList( list )
 	if #list == 1 then
@@ -140,3 +150,71 @@ function HS.ListToTable( list, t )
 	end
 	return t
 end
+function HS.SetMacroName( nameIn )
+	HS.LogMsg( "Set macro name to: "..nameIn, true )
+	HS.Print( ">"..nameIn.."<" )
+	if nameIn == "" then
+		HS.Print( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or "<is not set>" ) ) )
+	else
+		HS_settings.macroname = nameIn
+		HS.Print( string.format( HS.L["Set macro name to: %s"], HS_settings.macroname ) )
+		-- Update / Create Macro
+	end
+end
+function HS.ParseCmd(msg)
+	if msg then
+		local a,b,c = strfind(msg, "(%S+)")  --contiguous string of non-space characters
+		if a then
+			-- c is the matched string, strsub is everything after that, skipping the space
+			return c, strsub(msg, b+2)
+		else
+			return ""
+		end
+	end
+end
+function HS.Command( msg )
+	local cmd, param = HS.ParseCmd(msg)
+	cmd = string.lower( cmd )
+	if HS.CommandList[cmd] and HS.CommandList[cmd].alias then
+		cmd = HS.CommandList[cmd].alias
+	end
+	local cmdFunc = HS.CommandList[cmd]
+	if cmdFunc and cmdFunc.func then
+		cmdFunc.func(param)
+	else
+		HS.PrintHelp()
+	end
+end
+function HS.PrintHelp()
+	HS.Print( string.format(HS.L["%s (%s) by %s"], HS_MSG_ADDONNAME, HS_MSG_VERSION, HS_MSG_AUTHOR ) )
+	for cmd, info in pairs(HS.CommandList) do
+		if info.help then
+			local cmdStr = cmd
+			for c2, i2 in pairs(HS.CommandList) do
+				if i2.alias and i2.alias == cmd then
+					cmdStr = string.format( "%s / %s", cmdStr, c2 )
+				end
+			end
+			HS.Print(string.format("%s %s %s -> %s",
+				SLASH_HS1, cmdStr, info.help[1], info.help[2]))
+		end
+	end
+end
+HS.CommandList = {
+	[HS.L["help"]] = {
+		["func"] = HS.PrintHelp,
+		["help"] = {"", HS.L["Print this help."]}
+	},
+	[HS.L["name"]] = {
+		["func"] = HS.SetMacroName,
+		["help"] = {HS.L["<name>"], HS.L["Set the macro name to use."]}
+	},
+	[HS.L["update"]] = {
+		["func"] = HS.UpdateMacro,
+		["help"] = {"", HS.L["Update macro."]}
+	},
+	[HS.L["add"]] = {
+		["func"] = HS.Add,
+		["help"] = {HS.L["<mods>"]..HS.L["<link>"], HS.L["Add or list toys for a modifier"]}
+	},
+}
