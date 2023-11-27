@@ -191,17 +191,22 @@ function HS.Add( inParams )
 
 	if linkIn then
 		itemID = HS.GetItemIdFromLink( linkIn )
-		HS.LogMsg( "Adding "..itemID.." to "..modIn, true )
+		HS.LogMsg( "Adding "..linkIn.." to "..modIn, true )
 		if HS_settings[modIn] then
 			table.insert( HS_settings[modIn], itemID )
 		else
 			HS_settings[modIn] = {itemID}
 		end
+		HS.UpdateMacro()
 	else
-		HS.Print( string.format( HS.L["Items for mod: %s"], modIn ) )
-		for _, itemID in ipairs( HS_settings[modIn] ) do
-			itemLink = select( 2, GetItemInfo( itemID ) )
-			HS.Print( ( itemLink or "nil" ) )
+		if HS_settings[modIn] then
+			HS.Print( string.format( HS.L["Items for mod: %s"], modIn ) )
+			for _, itemID in ipairs( HS_settings[modIn] ) do
+				itemLink = select( 2, GetItemInfo( itemID ) )
+				HS.Print( ( itemLink or "nil" ) )
+			end
+		else
+			HS.Print( string.format( HS.L["No items for mod: %s"], modIn ) )
 		end
 	end
 end
