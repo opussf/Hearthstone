@@ -112,7 +112,7 @@ function HS.UpdateMacro()
 	end
 	-- Edit or create the macro
 	macroText = table.concat( macroTable, "\n" )
-	if a then
+	if macroName then
 		HS.LogMsg( "Edit macro", true )
 		EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, table.concat( macroTable, "\n" ) )
 	else
