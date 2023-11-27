@@ -36,7 +36,7 @@ function test.test_add_normal_nolink()
 end
 function test.test_remove_normal()
 	HS.Command( "remove |cffffffff|Hitem:6948::::::::70:258:::::::::|h[Hearthstone]|h|r" )
-	assertEquals( 0, #HS_settings.normal )
+	assertIsNil( HS_settings.normal )
 end
 
 test.run()

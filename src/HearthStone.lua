@@ -103,7 +103,7 @@ function HS.UpdateMacro()
 				hsLine = hsLine.." [mod:"..modKey.."] "..HS.GetItemFromList(HS_settings[modKey])..";"
 			end
 		end
-		hsLine = hsLine.." "..HS.GetItemFromList(HS_settings.normal)
+		hsLine = hsLine.." "..(HS.GetItemFromList(HS_settings.normal) or "")
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
@@ -111,12 +111,16 @@ function HS.UpdateMacro()
 	end
 	-- Edit or create the macro
 	macroText = table.concat( macroTable, "\n" )
-	if macroName then
-		HS.LogMsg( "Edit macro", true )
-		EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, table.concat( macroTable, "\n" ) )
+	if strlen(macroText) <= 255 then
+		if macroName then
+			HS.LogMsg( "Edit macro", true )
+			EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, macroText )
+		else
+			HS.LogMsg( "Create macro", true )
+			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
+		end
 	else
-		HS.LogMsg( "Create macro", true )
-		CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", table.concat( macroTable, "\n" ) )
+		HS.Print( string.format( HS.L["ERROR:"].." "..HS.L["Macro length > 255 chars."]..HS.L["Please edit source macro."] ) )
 	end
 end
 function HS.ScanToys()
@@ -133,13 +137,20 @@ function HS.ScanToys()
 	end
 end
 function HS.GetItemFromList( list )
-	if #list == 1 then
-		HS.LogMsg( "Only 1 item found in given list: "..list[1] )
-		return( "item:"..list[1] )
-	else
-		local r = random(#list)
-		HS.LogMsg( "Picking "..r.."/"..#list, true )
-		return( "item:"..list[r] )
+	if list then
+		local returnItem
+		if #list == 1 then
+			HS.LogMsg( "Only 1 item found in given list: "..list[1] )
+			returnItem = list[1]
+		else
+			-- local randID,
+			local r = random(#list)
+			HS.LogMsg( "Picking "..r.."/"..#list, true )
+			returnItem = list[r]
+		end
+		if returnItem then
+			return( "item:"..returnItem )
+		end
 	end
 end
 function HS.ListToTable( list, t )
@@ -244,6 +255,9 @@ function HS.Remove( inParams )
 		end
 		if rmIdx then
 			table.remove( HS_settings[modIn], rmIdx )
+		end
+		if #HS_settings[modIn] == 0 then
+			HS_settings[modIn] = nil
 		end
 	end
 end
