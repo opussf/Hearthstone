@@ -315,10 +315,10 @@ end
 function HS.Command( msg )
 	local cmd, param = HS.ParseCmd(msg)
 	cmd = string.lower( cmd )
-	if HS.CommandList[cmd] and HS.CommandList[cmd].alias then
-		cmd = HS.CommandList[cmd].alias
+	if HS.commandList[cmd] and HS.commandList[cmd].alias then
+		cmd = HS.commandList[cmd].alias
 	end
-	local cmdFunc = HS.CommandList[cmd]
+	local cmdFunc = HS.commandList[cmd]
 	if cmdFunc and cmdFunc.func then
 		cmdFunc.func(param)
 	else
@@ -330,10 +330,10 @@ function HS.PrintHelp()
 	if not HS_settings.macroname then
 		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
 	end
-	for cmd, info in pairs(HS.CommandList) do
+	for cmd, info in pairs(HS.commandList) do
 		if info.help then
 			local cmdStr = cmd
-			for c2, i2 in pairs(HS.CommandList) do
+			for c2, i2 in pairs(HS.commandList) do
 				if i2.alias and i2.alias == cmd then
 					cmdStr = string.format( "%s / %s", cmdStr, c2 )
 				end
@@ -343,7 +343,7 @@ function HS.PrintHelp()
 		end
 	end
 end
-HS.CommandList = {
+HS.commandList = {
 	[HS.L["help"]] = {
 		["func"] = HS.PrintHelp,
 		["help"] = {"", HS.L["Print this help."]}
@@ -369,7 +369,7 @@ HS.CommandList = {
 		["help"] = {"", HS.L["List known modifers"]}
 	},
 	[HS.L["debug"]] = {
-		["func"] = function() HS_settings.debug = true; end,
-		["help"] = {"", "SetDebug on"}
+		["func"] = function() HS_settings.debug = (HS_settings.debug and nil or true); end,
+		["help"] = {"", "Toggle Debug"}
 	},
 }
