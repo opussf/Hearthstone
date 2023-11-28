@@ -28,8 +28,8 @@ function test.test_add_normal_link()
 	assertEquals( "165670", HS_settings.normal[2] )
 end
 function test.test_add_alt_shift_link()
-	HS.Command( "add alt-shift |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
-	assertEquals( "165670", HS_settings["alt-shift"][1] )
+	HS.Command( "add shiftalt |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
+	assertEquals( "165670", HS_settings["shiftalt"][1] )
 end
 function test.test_add_normal_nolink()
 	HS.Command( "add" )

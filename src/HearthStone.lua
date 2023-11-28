@@ -318,6 +318,9 @@ function HS.Command( msg )
 end
 function HS.PrintHelp()
 	HS.Print( string.format(HS.L["%s (%s) by %s"], HS_MSG_ADDONNAME, HS_MSG_VERSION, HS_MSG_AUTHOR ) )
+	if not HS_settings.macroname then
+		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
+	end
 	for cmd, info in pairs(HS.CommandList) do
 		if info.help then
 			local cmdStr = cmd
