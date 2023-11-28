@@ -56,6 +56,9 @@ function HS.OnLoad()
 	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
 
 	HSFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
+	HSFrame:RegisterEvent( "PLAYER_REGEN_DISABLED" )
+	HSFrame:RegisterEvent( "PLAYER_REGEN_ENABLED" )
+
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	-- HSFrame:RegisterEvent( "TOYS_UPDATED" )
 end
@@ -65,11 +68,26 @@ end
 function HS.TOYS_UPDATED()
 	HS.LogMsg( "TOYS_UPDATED - This seems to be frequent.", HS_settings.debug )
 end
+function HS.PLAYER_REGEN_DISABLED()
+	-- combat start
+	HS.inCombat = true
+end
+function HS.PLAYER_REGEN_ENABLED()
+	HS.inCombat = nil
+	if HS.combatUpdate then
+		HS.UpdateMacro()
+		HS.combatUpdate = nil
+	end
+end
 function HS.PLAYER_ENTERING_WORLD()
 	HS.PruneLog()
 	HS.UpdateMacro()
 end
 function HS.UpdateMacro()
+	if HS.inCombat then
+		HS.combatUpdate = true
+		return
+	end
 	-- Updates / Creates macro
 	HS.LogMsg( "Update Macro", HS_settings.debug )
 	if not HS_settings.macroname then
