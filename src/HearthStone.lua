@@ -112,13 +112,13 @@ function HS.UpdateMacro()
 	end
 	-- Use modOrder to create a /use line, and replace / insert into the macroTable
 	if hsLineNum then
-		hsLine = "/use"
+		hsLine = "/use "
 		for _, modKey in ipairs( HS.modOrder ) do
 			if HS_settings[modKey] then
-				hsLine = hsLine.." [mod:"..modKey.."] "..HS.GetItemFromList(HS_settings[modKey])..";"
+				hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[modKey])..";"
 			end
 		end
-		hsLine = hsLine.." "..(HS.GetItemFromList(HS_settings.normal) or "")
+		hsLine = hsLine..(HS.GetItemFromList(HS_settings.normal) or "")
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
