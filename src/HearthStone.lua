@@ -18,13 +18,10 @@ HS_log = {}
 HS_settings = {}
 
 HS_settings = {
-	--["alt-shift"] = {"140192"},
-	--["alt"] = {"110560"},
-	--["normal"] =  {"6948", "166747", "162973", "172179", "193588"},
-	["normal"] = {"6948"}
+	["normal"] = {"6948"}  -- default to get you going.   Can remove
 }
 HS.modOrder = {
-	"alt-shift", "alt"
+	"shiftctrlalt", "shiftctrl", "shiftalt", "shift", "ctrlalt", "ctrl", "alt"
 }
 
 function HS.Print( msg, showName )
@@ -120,7 +117,7 @@ function HS.UpdateMacro()
 			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
 		end
 	else
-		HS.Print( string.format( HS.L["ERROR:"].." "..HS.L["Macro length > 255 chars."]..HS.L["Please edit source macro."] ) )
+		HS.Print( string.format( HS.L["ERROR:"].." "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ) )
 	end
 end
 function HS.ScanToys()
@@ -279,6 +276,13 @@ function HS.Remove( inParams )
 		if #HS_settings[modIn] == 0 then
 			HS_settings[modIn] = nil
 		end
+		HS.UpdateMacro()
+	end
+end
+function HS.Mods()
+	HS.Print( string.format( HS.L["Modifier list:"] ) )
+	for i, mod in ipairs( HS.modOrder ) do
+		HS.Print( i.."> "..mod )
 	end
 end
 function HS.GetItemIdFromLink( itemLink )
@@ -347,6 +351,10 @@ HS.CommandList = {
 	[HS.L["remove"]] = {
 		["func"] = HS.Remove,
 		["help"] = {HS.L["<mods>"].." "..HS.L["<link>"], HS.L["Remove toy from a modifier"]}
+	},
+	[HS.L["mods"]] = {
+		["func"] = HS.Mods,
+		["help"] = {"", HS.L["List known modifers"]}
 	},
 	[HS.L["debug"]] = {
 		["func"] = function() HS_settings.debug = true; end,
