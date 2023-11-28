@@ -5,7 +5,7 @@ if GetLocale() == "esES" or GetLocale() == "esMX" then
     L.L["help"] = "ayuda"
     L.L["name"] = "nombre"
     L.L["<name>"] = "<nombre>"
-    L.L["HearthStone macro name is currently: %s"] = "El nombre de la macro de HearthStone es actualmente: %s"
+    L.L["HearthStone macro name is currently: %s"] = "El nombre de la macro de Piedra de hogar es actualmente: %s"
     L.L["WARNING"] = "AVISO"
     L.L["ERROR"] = "ERROR"
     L.L["There is no #HS in the %s macro."] = "No hay #HS en la macro %s."
