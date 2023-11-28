@@ -139,7 +139,7 @@
 		</fail>
 	</target>
 
-	<target name="curse" depends="package">
+	<target name="curse" depends="package" description="Package to curse.dir">
 		<property name="curse.dir" location="${ant.project.name}-cf"/>
 		<copy todir="${curse.dir}">
 			<fileset dir="${package.dir}"/>

@@ -104,7 +104,7 @@ function HS.UpdateMacro()
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
-		HS.LogMsg( string.format( HS.L["There is no #HS in the %s macro."], HS_settings.macroname ), HS_settings.debug)
+		HS.Print( string.format( HS.L["WARNING"]..": "..HS.L["There is no #HS in the %s macro."], HS_settings.macroname ) )
 	end
 	-- Edit or create the macro
 	macroText = table.concat( macroTable, "\n" )
@@ -117,7 +117,7 @@ function HS.UpdateMacro()
 			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
 		end
 	else
-		HS.Print( string.format( HS.L["ERROR:"].." "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ) )
+		HS.Print( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ) )
 	end
 end
 function HS.ScanToys()
@@ -236,7 +236,6 @@ function HS.Add( inParams )
 	else
 		HS.Print( string.format( HS.L["No items for mod: %s"], modIn ) )
 	end
-
 end
 function HS.Remove( inParams )
 	-- takes optional mod string, link, to add or list
@@ -277,6 +276,16 @@ function HS.Remove( inParams )
 			HS_settings[modIn] = nil
 		end
 		HS.UpdateMacro()
+	end
+	-- Print for given mod
+	if HS_settings[modIn] then
+		HS.Print( string.format( HS.L["Items for mod: %s"], modIn ) )
+		for _, itemID in ipairs( HS_settings[modIn] ) do
+			itemLink = select( 2, GetItemInfo( itemID ) )
+			HS.Print( ( itemLink or "nil" ) )
+		end
+	else
+		HS.Print( string.format( HS.L["No items for mod: %s"], modIn ) )
 	end
 end
 function HS.Mods()
