@@ -1,5 +1,6 @@
 .DS_Store
 target/
-INeed-cf/
+HearthStone-cf/
 
 *.sublime*
+ref/
