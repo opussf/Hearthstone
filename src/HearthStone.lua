@@ -369,7 +369,7 @@ HS.commandList = {
 		["help"] = {"", HS.L["List known modifers"]}
 	},
 	[HS.L["debug"]] = {
-		["func"] = function() HS_settings.debug = (HS_settings.debug and nil or true); end,
-		["help"] = {"", "Toggle Debug"}
+		["func"] = function() HS_settings.debug = not HS_settings.debug; HS.Print( "Debug is now: "..(HS_settings.debug and "on" or "off")); end,
+		--["help"] = {"", "Toggle Debug"}
 	},
 }
