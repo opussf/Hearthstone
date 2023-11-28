@@ -4,8 +4,9 @@
 ## Author: opussf
 ## Version: @VERSION@
 ## Description: Allows building a Hearthstone macro with random stones
-## Description-esES: Displays a message greeting Spanish
-## Description-esMX: Displays a message greeting Mexico
+## Description-esES: Permite construir una macro de Piedra de hogar con piedras aleatorias.
+## Description-esMX: Permite construir una macro de Piedra de hogar con piedras aleatorias.
+## Description-ptBR: Permite construir uma macro de Hearthstone com pedras aleatórias
 ## SavedVariables: HS_settings HS_log
 ## SavedVariablesPerCharacter:
 localization_core.lua
