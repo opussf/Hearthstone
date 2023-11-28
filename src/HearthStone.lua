@@ -91,7 +91,7 @@ function HS.UpdateMacro()
 	-- Updates / Creates macro
 	HS.LogMsg( "Update Macro", HS_settings.debug )
 	if not HS_settings.macroname then
-		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
+		HS.Print( string.format( HS.L["Please set macro name to update."] ) )
 		return
 	end
 	local macroName, _, macroText = GetMacroInfo( HS_settings.macroname )
@@ -195,7 +195,7 @@ function HS.ListToTable( list, t )
 end
 function HS.SetMacroName( nameIn )
 	if nameIn == "" then
-		HS.Print( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or "<is not set>" ) ) )
+		HS.Print( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ) )
 	else
 		HS_settings.macroname = nameIn
 		HS.Print( string.format( HS.L["Set macro name to: %s"], HS_settings.macroname ) )
@@ -346,7 +346,7 @@ end
 function HS.PrintHelp()
 	HS.Print( string.format(HS.L["%s (%s) by %s"], HS_MSG_ADDONNAME, HS_MSG_VERSION, HS_MSG_AUTHOR ) )
 	if not HS_settings.macroname then
-		HS.Print( string.format( HS.L["Please set Macroname to update."] ) )
+		HS.Print( string.format( HS.L["Set the macro name to use."] ) )
 	end
 	for cmd, info in pairs(HS.commandList) do
 		if info.help then
