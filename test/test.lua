@@ -1,27 +1,47 @@
 #!/usr/bin/env lua
 
-addonData = { ["Version"] = "1.0",
-}
-
 require "wowTest"
+myLocale = "esMX"
 
 test.outFileName = "testOut.xml"
-
--- Figure out how to parse the XML here, until then....
-HSFrame = CreateFrame()
 
 -- require the file to test
 ParseTOC( "../src/HearthStone.toc" )
 
-
--- addon setup
+-- Figure out how to parse the XML here, until then....
+HSFrame = CreateFrame()
 
 function test.before()
 	HS_settings = {
 		["normal"] = {"6948"}
 	}
+	HS.inCombat = nil
+	HS.OnLoad()
+	HS.LOADING_SCREEN_DISABLED()
 end
 function test.after()
+end
+function test.test_event_regenDisabled()
+	assertTrue( HSFrame.Events.PLAYER_REGEN_DISABLED, "PLAYER_REGEN_DISABLED should be a registerd event." )
+	HS.PLAYER_REGEN_DISABLED()
+	assertTrue( HS.inCombat, "HS.inCombat should be set." )
+end
+function test.test_event_regenEnabled()
+	assertTrue( HSFrame.Events.PLAYER_REGEN_ENABLED, "PLAYER_REGEN_ENABLED should be a registerd event." )
+	HS.inCombat = true
+	HS.PLAYER_REGEN_ENABLED()
+	assertIsNil( HS.inCombat, "HS.inCombat should be nil." )
+end
+
+function test.test_setName()
+	HS.Command( "name HSMacro" )
+	assertEquals( "HSMacro", HS_settings.macroname )
+end
+function test.test_help()
+	HS.Command( "help" )
+end
+function test.test_help_on_nocommand()
+	HS.Command()
 end
 function test.test_add_normal_link()
 	HS.Command( "add |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
@@ -40,6 +60,3 @@ function test.test_remove_normal()
 end
 
 test.run()
-
-
----https://www.lua.org/pil/8.html
