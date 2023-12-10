@@ -16,3 +16,12 @@ TODO.md
 	HS macro
 	Toy macro
 	etc macro
+
+
+[ ] Delay the Random choice until a few seconds after Loading screen is finished
+	Do this at least for the first time.
+	GetItemCount does not always return the correct value right at startup.
+
+	Use Frame:SetScript to register and remove the OnUpdate script.
+	Set a delay of 1 or 2 seconds.
+
