@@ -62,11 +62,18 @@ function HS.OnLoad()
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	HSFrame:RegisterEvent( "TOYS_UPDATED" )
 end
+function HS.OnUpdate()
+	if HS.lastToysUpdated and HS.lastToysUpdated + 1 > time() then
+		HS.UpdateMacro()
+		HSFrame:SetScript( "OnUpdate", nil )
+	end
+end
 function HS.NEW_TOY_ADDED()
 	HS.LogMsg( "NEW_TOY_ADDED", HS_settings.debug )
 end
 function HS.TOYS_UPDATED()
 	HS.LogMsg( "TOYS_UPDATED - This seems to be frequent.", HS_settings.debug )
+	HS.lastToysUpdated = time()
 end
 function HS.PLAYER_REGEN_DISABLED()
 	-- combat start
