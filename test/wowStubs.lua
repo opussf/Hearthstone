@@ -1663,6 +1663,38 @@ TooltipDataProcessor = {}
 function TooltipDataProcessor.AddTooltipPostCall()
 end
 
+----------
+-- Macros
+----------
+myMacros = {}  -- ["macroName"] = { ["icon"] = "", ["text"] = "", ["isLocal"] = true }
+function GetMacroInfo( macroName )
+	-- returns:  macroName, macroIcon, macroText, isLocal (bool)
+	if myMacros[macroName] then
+		return macroName, myMacros[macroName][icon], myMacros[macroName][text], myMacros[macroName][isLocal] or false
+	end
+end
+function CreateMacro( macroName, macroIcon, macroText, perChar )
+	-- returns: macroID
+	if macroName and not myMacros[macroName] then
+		myMacros[macroName] = { ["icon"] = macroIcon, ["text"] = macroText }
+		return 1 -- return the ID
+	end
+end
+function EditMacto( macroName, newName, newIcon, body, islocal, perChar )
+	-- returns: new macroID
+	if macroName and myMacros[macroName] then
+		if newName then
+			myMacros[newName] = myMacros[macroName]
+			macroName = newName
+		end
+		if newIcon then
+			myMacros[macroName].icon = newIcon
+		end
+		myMacros[macroName].text = body
+		return 1 -- return the ID
+	end
+end
+
 -----------------------------------------
 -- TOC functions
 addonData = {}

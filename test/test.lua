@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 require "wowTest"
-myLocale = "esMX"
+--myLocale = "esMX"
 
 test.outFileName = "testOut.xml"
 
@@ -13,8 +13,10 @@ HSFrame = CreateFrame()
 
 function test.before()
 	HS_settings = {
-		["normal"] = {"6948"}
+		["normal"] = {"6948"},
+		["macroname"] = "testmacro"
 	}
+	HS_log = {}
 	HS.inCombat = nil
 	HS.OnLoad()
 	HS.LOADING_SCREEN_DISABLED()
@@ -33,9 +35,16 @@ function test.test_event_regenEnabled()
 	assertIsNil( HS.inCombat, "HS.inCombat should be nil." )
 end
 
-function test.test_setName()
+function test.test_setName_setsName()
 	HS.Command( "name HSMacro" )
 	assertEquals( "HSMacro", HS_settings.macroname )
+end
+function test.test_setName_createsMacro()
+	HS.Command( "name newmacro")
+	assertTrue( myMacros["newmacro"] )
+end
+function test.test_getName()
+	HS.Command( "name" )
 end
 function test.test_help()
 	HS.Command( "help" )
@@ -57,6 +66,10 @@ end
 function test.test_remove_normal()
 	HS.Command( "remove |cffffffff|Hitem:6948::::::::70:258:::::::::|h[Hearthstone]|h|r" )
 	assertIsNil( HS_settings.normal )
+end
+function test.test_update()
+	HS.Command( "update" )
+	fail( "Not sure how to test this." )
 end
 
 test.run()
