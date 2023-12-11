@@ -399,7 +399,7 @@ Frame = {
 		["SetMinMaxValues"] = function(self, min, max) self.min=min; self.max=max; end,
 		["SetValue"] = function(self, value) self.value=value end,
 		["SetStatusBarColor"] = function() end,
-		["SetScript"] = function() end,
+		["SetScript"] = function(self, event, func) end,
 		["SetAttribute"] = function() end,
 
 		["SetChecked"] = function() end,
