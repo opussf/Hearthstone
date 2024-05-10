@@ -52,7 +52,7 @@ function HS.PruneLog()
 	end
 end
 function HS.OnLoad()
-	SLASH_HS1 = "/hs";
+	SLASH_HS1 = "/hs"
 	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
 
 	HSFrame:RegisterEvent( "LOADING_SCREEN_DISABLED" )
@@ -82,6 +82,7 @@ function HS.PLAYER_REGEN_DISABLED()
 	HS.inCombat = true
 end
 function HS.PLAYER_REGEN_ENABLED()
+	-- combat end
 	HS.inCombat = nil
 	if HS.combatUpdate then
 		HS.UpdateMacro()
@@ -91,7 +92,7 @@ end
 function HS.LOADING_SCREEN_DISABLED()
 	HS.LogMsg( "LOADING_SCREEN_DISABLED", HS_settings.debug )
 	HS.PruneLog()
-	HS.UpdateMacro()
+	-- HS.UpdateMacro()
 end
 function HS.UpdateMacro()
 	if HS.inCombat then
@@ -185,6 +186,7 @@ function HS.GetItemFromList( list )
 	end
 end
 function HS.ListToTable( list, t )
+	print( string.format( "ListToTable( %s, %s )", (list or "nil"), (t or "nil") ) )
 	for item in string.gmatch( list, '[^\n]+' ) do
 		item = item:gsub( '^%s*(.-)%s*$', '%1' )
 		table.insert( t, item )
@@ -193,7 +195,7 @@ function HS.ListToTable( list, t )
 end
 function HS.SetMacroName( nameIn )
 	if nameIn == "" then
-		HS.Print( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ) )
+		HS.LogMsg( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ), true )
 	else
 		HS_settings.macroname = nameIn
 		HS.Print( string.format( HS.L["Set macro name to: %s"], HS_settings.macroname ) )
