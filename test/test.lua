@@ -79,8 +79,11 @@ function test.test_remove_normal()
 	assertIsNil( HS_settings.normal )
 end
 function test.test_update()
+	HS_settings.normal[1] = "165670"
+	assertEquals( "/use item:6948", HS_settings.macro[3] )
 	HS.Command( "update" )
-	-- fail( "Not sure how to test this." )
+	assertEquals( "/use item:165670", HS_settings.macro[3] )
 end
+
 
 test.run()

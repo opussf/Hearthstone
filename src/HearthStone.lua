@@ -110,8 +110,6 @@ function HS.UpdateMacro()
 	-- build a table from the macro text to be able to update
 	macroTable = {}
 	if macroName then
-		-- print( "MacroName: >"..macroName.."<" ) -- MacroText: "..macroText )
-		-- test.dump(myMacros)
 		HS.ListToTable( macroText, macroTable )
 	else
 		macroTable = {"#showtooltip","#HS","/use"}  -- simple macro to create if no macro by name given.
@@ -188,7 +186,6 @@ function HS.GetItemFromList( list )
 	end
 end
 function HS.ListToTable( list, t )
-	-- print( string.format( "ListToTable( %s, %s )", (list or "nil"), (t or "nil") ) )
 	for item in string.gmatch( list, '[^\n]+' ) do
 		item = item:gsub( '^%s*(.-)%s*$', '%1' )
 		table.insert( t, item )
