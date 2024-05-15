@@ -99,5 +99,12 @@ function test.test_long_macro_post_edit_works_ok()
 	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ) )
 	assertTrue( string.find( myMacros.general[1].text, "12345$" ) )
 end
+function test.test_old_macro_to_new_macro_is_weird()
+	EditMacro( "testmacro", nil, nil, "#showtooltip\n#hs\n/use item:1234" )
+	HS.Command( "update" )
+	assertEquals( 45, string.len( myMacros.general[1].text ), "New macro is longer." )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:1234" ), "/use item:1234 should still be here." )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ), "/use item:6948 should not be inserted." )
+end
 
 test.run()
