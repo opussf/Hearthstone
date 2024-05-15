@@ -89,16 +89,12 @@ end
 function test.test_long_macro_old_method_does_not_destroy()
 	EditMacro( "testmacro", nil, nil, "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n#hs\n/use item:1234\n123456789012345678901234567890\n2345")
 	HS.Command( "update" )
-	-- test.dump(myMacros)
-	-- test.dump(HS_log)
 	assertEquals( 255, string.len( myMacros.general[1].text ) )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:1234" ))
 end
 function test.test_long_macro_post_edit_works_ok()
 	EditMacro( "testmacro", nil, nil, "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:4321#hs\n123456789012345678901234567890\n12345")
 	HS.Command( "update" )
-	-- test.dump(myMacros)
-	-- test.dump(HS_log)
 	assertEquals( 255, string.len( myMacros.general[1].text ) )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ))
 end
