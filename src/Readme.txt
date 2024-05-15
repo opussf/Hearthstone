@@ -49,7 +49,7 @@ Adding a new stone to the list to use is done like this:
 First, decide which modifier you want to use:  `/hs mods`
 I like to have my Garrison Hearthstone usable with the alt modifier.
 
-Open the Toy Box, find the Garrison Hearthstone, tell HearthStone to it with the alt modifier:
+Open the Toy Box, find the Garrison Hearthstone, tell HearthStone to use it with the alt modifier:
 `/hs add alt [Garrison Hearthstone]`   < shift-click the toy to get the link.
 
 This will also show the list of toys to pick from for the alt modifier.
