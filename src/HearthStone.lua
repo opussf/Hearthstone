@@ -13,8 +13,8 @@ COLOR_GOLD = "|cffcfb52b"
 COLOR_NEON_BLUE = "|cff4d4dff"
 COLOR_END = "|r"
 
--- saved log file
-HS_log = {}
+-- -- saved log file
+-- HS_log = {}
 HS_settings = {}
 
 HS_settings = {
@@ -52,7 +52,7 @@ function HS.PruneLog()
 	end
 end
 function HS.OnLoad()
-	SLASH_HS1 = "/hs";
+	SLASH_HS1 = "/hs"
 	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
 
 	HSFrame:RegisterEvent( "LOADING_SCREEN_DISABLED" )
@@ -82,6 +82,7 @@ function HS.PLAYER_REGEN_DISABLED()
 	HS.inCombat = true
 end
 function HS.PLAYER_REGEN_ENABLED()
+	-- combat end
 	HS.inCombat = nil
 	if HS.combatUpdate then
 		HS.UpdateMacro()
@@ -193,7 +194,7 @@ function HS.ListToTable( list, t )
 end
 function HS.SetMacroName( nameIn )
 	if nameIn == "" then
-		HS.Print( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ) )
+		HS.LogMsg( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ), true )
 	else
 		HS_settings.macroname = nameIn
 		HS.Print( string.format( HS.L["Set macro name to: %s"], HS_settings.macroname ) )
@@ -330,7 +331,9 @@ function HS.ParseCmd(msg)
 end
 function HS.Command( msg )
 	local cmd, param = HS.ParseCmd(msg)
-	cmd = string.lower( cmd )
+	if cmd then
+		cmd = string.lower( cmd )
+	end
 	if HS.commandList[cmd] and HS.commandList[cmd].alias then
 		cmd = HS.commandList[cmd].alias
 	end
