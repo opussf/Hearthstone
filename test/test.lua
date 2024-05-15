@@ -14,16 +14,22 @@ HSFrame = CreateFrame()
 HS.OnLoad()
 
 function test.before()
+	myMacros.general = {}
+	myMacros.personal = {}
 	HS_settings = {
 		["normal"] = {"6948"},
 		["macroname"] = "testmacro"
 	}
 	HS_log = {}
 	HS.inCombat = nil
+	HS.OnLoad()
+	-- test.dump( HS_settings )
 	HS.LOADING_SCREEN_DISABLED()
 end
 function test.after()
+	-- test.dump( HS_log )
 end
+
 function test.test_event_regenDisabled()
 	assertTrue( HSFrame.Events.PLAYER_REGEN_DISABLED, "PLAYER_REGEN_DISABLED should be a registerd event." )
 	HS.PLAYER_REGEN_DISABLED()
@@ -42,12 +48,12 @@ end
 function test.test_setName_createsMacro()
 	HS.Command( "name newmacro")
 	assertEquals( "newmacro", HS_settings.macroname )
-	assertTrue( myMacros["newmacro"] )
+	assertEquals( "newmacro", myMacros.general[1].name )
 end
 function test.test_getName()
 	HS_settings.macroname = "bob"
 	HS.Command( "name" )
-	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][2] )
+	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][8] )
 end
 function test.test_help()
 	-- going to be hard to test unless the help (print) gets captured
@@ -61,9 +67,6 @@ function test.test_add_normal_link()
 	HS.Command( "add |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
 	assertEquals( "165670", HS_settings.normal[2] )
 end
-
---[[
-
 function test.test_add_alt_shift_link()
 	HS.Command( "add shiftalt |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
 	assertEquals( "165670", HS_settings["shiftalt"][1] )
@@ -77,7 +80,7 @@ function test.test_remove_normal()
 end
 function test.test_update()
 	HS.Command( "update" )
-	fail( "Not sure how to test this." )
+	-- fail( "Not sure how to test this." )
 end
-]]
+
 test.run()

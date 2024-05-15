@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  February 18 2024
--- Revision:  9.2
+-- Date    :  May 13 2024
+-- Revision:  9.4.2
 -----------------------------------------
 -- This is an uber simple unit test implementation
 -- It creates a dictionary called test.
@@ -78,7 +78,32 @@ function test.PairsByKeys( t, f )  -- This is an awesome function I found
 	end
 	return iter
 end
-
+function test.EscapeStr( strIn )
+	-- This escapes a str
+	strIn = string.gsub( strIn, "\\", "\\\\" )
+	strIn = string.gsub( strIn, "\"", "\\\"" )
+	return strIn
+end
+function test.dump( tableIn, depth )
+	depth = depth or 1
+	for k, v in test.PairsByKeys( tableIn ) do
+		io.write( ("%s[\"%s\"] = "):format( string.rep("\t", depth), k ) )
+		if ( type( v ) == "boolean" ) then
+			io.write( v and "true" or "false" )
+		elseif ( type( v ) == "table" ) then
+			io.write( "{\n" )
+			test.dump( v, depth+1 )
+			io.write( ("%s}"):format( string.rep("\t", depth) ) )
+		elseif ( type( v ) == "string" ) then
+			io.write( "\""..test.EscapeStr( v ).."\"" )
+		elseif ( type( v ) == "function" ) then
+			io.write( "function()" )
+		else
+			io.write( v )
+		end
+		io.write( ",\n" )
+	end
+end
 function test.toXML()
 	if test.outFileName then
 		local f = assert( io.open( test.outFileName, "w"))
