@@ -23,11 +23,9 @@ function test.before()
 	HS_log = {}
 	HS.inCombat = nil
 	HS.OnLoad()
-	-- test.dump( HS_settings )
 	HS.LOADING_SCREEN_DISABLED()
 end
 function test.after()
-	-- test.dump( HS_log )
 end
 
 function test.test_event_regenDisabled()
@@ -49,6 +47,7 @@ function test.test_setName_createsMacro()
 	HS.Command( "name newmacro")
 	assertEquals( "newmacro", HS_settings.macroname )
 	assertEquals( "newmacro", myMacros.general[1].name )
+	assertEquals( "INV_MISC_QUESTIONMARK", myMacros.general[1].icon )
 end
 function test.test_getName()
 	HS_settings.macroname = "bob"
@@ -87,6 +86,5 @@ end
 function test.test_macroSize()
 	assertEquals( 31, string.len( myMacros.general[1].text ))
 end
-
 
 test.run()
