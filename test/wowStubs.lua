@@ -1767,9 +1767,10 @@ function CreateMacro( macroName, macroIcon, macroText, perChar )
 	end
 end
 function EditMacro( macroName, newName, newIcon, body )
+	-- macroName is name or index
 	-- returns: new macroID
 	if macroName then
-		local mIndex = GetMacroIndexByName( macroName )
+		mIndex = tonumber(macroName) or GetMacroIndexByName( macroName )
 		if mIndex ~= 0 then
 			local location = mIndex > 120 and "personal" or "general"
 			mIndex = mIndex>120 and mIndex-120 or mIndex

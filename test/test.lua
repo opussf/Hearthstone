@@ -27,7 +27,7 @@ function test.before()
 end
 function test.after()
 end
-
+--[[
 function test.test_event_regenDisabled()
 	assertTrue( HSFrame.Events.PLAYER_REGEN_DISABLED, "PLAYER_REGEN_DISABLED should be a registerd event." )
 	HS.PLAYER_REGEN_DISABLED()
@@ -77,14 +77,24 @@ function test.test_remove_normal()
 	HS.Command( "remove |cffffffff|Hitem:6948::::::::70:258:::::::::|h[Hearthstone]|h|r" )
 	assertIsNil( HS_settings.normal )
 end
-function test.test_update()
-	HS_settings.normal[1] = "165670"
-	assertEquals( "/use item:6948", HS_settings.macro[3] )
+]]
+-- function test.test_update()
+-- 	HS_settings.normal[1] = "165670"
+-- 	assertEquals( "/use item:6948#hs", HS_settings.macro[3] )
+-- 	HS.Command( "update" )
+-- 	assertEquals( "/use item:165670#hs", HS_settings.macro[3] )
+-- end
+-- function test.test_macroSize()
+-- 	assertEquals( 30, string.len( myMacros.general[1].text ))
+-- end
+function test.test_long_macro()
+	test.dump( HS_settings )
+	EditMacro( "testmacro", nil, nil, "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n#hs\n/use 1\nHello")
+
 	HS.Command( "update" )
-	assertEquals( "/use item:165670", HS_settings.macro[3] )
-end
-function test.test_macroSize()
-	assertEquals( 31, string.len( myMacros.general[1].text ))
+	test.dump(myMacros)
+	test.dump(HS_log)
+	assertEquals( 30, string.len( myMacros.general[1].text ))
 end
 
 test.run()

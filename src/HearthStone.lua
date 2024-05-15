@@ -131,6 +131,7 @@ function HS.UpdateMacro()
 			end
 		end
 		hsLine = hsLine..(HS.GetItemFromList(HS_settings.normal) or "")
+		print( hsLineNum..": ->"..hsLine )
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
