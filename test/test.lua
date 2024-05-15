@@ -84,6 +84,9 @@ function test.test_update()
 	HS.Command( "update" )
 	assertEquals( "/use item:165670", HS_settings.macro[3] )
 end
+function test.test_macroSize()
+	assertEquals( 31, string.len( myMacros.general[1].text ))
+end
 
 
 test.run()
