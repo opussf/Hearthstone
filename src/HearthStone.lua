@@ -62,6 +62,14 @@ function HS.OnLoad()
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	-- HSFrame:RegisterEvent( "TOYS_UPDATED" )
 end
+function HS.OnUpdate()
+	HS.LogMsg( "OnUpdate", HS_settings.debug )
+	if HS.lastToysUpdated and HS.lastToysUpdated + 1 > time() then
+		HS.UpdateMacro()
+		HS.LogMsg( "Remove OnUpdate", HS_settings.debug )
+		HSFrame:SetScript( "OnUpdate", nil )
+	end
+end
 function HS.PLAYER_REGEN_DISABLED()
 	-- combat start
 	HS.inCombat = true
