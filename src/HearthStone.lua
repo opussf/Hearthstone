@@ -97,13 +97,16 @@ function HS.UpdateMacro()
 	if macroName then
 		HS.ListToTable( macroText, macroTable )
 	else
-		macroTable = {"#showtooltip","#HS","/use"}  -- simple macro to create if no macro by name given.
+		macroTable = {"#showtooltip","#HS"}  -- simple macro to create if no macro by name given.
 	end
+	local hsText = "#HS"
 	-- look for #HS and replace the following line
 	for lnum, line in ipairs( macroTable ) do
 		HS.LogMsg( lnum.."> "..line )
-		if strfind( string.upper(line), "#HS" ) then
-			hsLineNum = lnum + 1
+		s, e, hsT = strfind( line, "(#[Hh][Ss])")
+		if s then
+			hsLineNum = lnum
+			hsText = hsT
 		end
 	end
 	-- Use modOrder to create a /use line, and replace / insert into the macroTable
@@ -115,7 +118,7 @@ function HS.UpdateMacro()
 				hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[modKey])..";"
 			end
 		end
-		hsLine = hsLine..(HS.GetItemFromList(HS_settings.normal) or "")
+		hsLine = hsLine..(HS.GetItemFromList(HS_settings.normal) or "")..hsText
 		macroTable[hsLineNum] = hsLine
 		HS_settings.macro = macroTable
 	else
@@ -132,7 +135,7 @@ function HS.UpdateMacro()
 			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
 		end
 	else
-		HS.Print( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ) )
+		HS.LogMsg( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )
 	end
 end
 function HS.GetItemFromList( list )

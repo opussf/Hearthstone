@@ -52,7 +52,7 @@ end
 function test.test_getName()
 	HS_settings.macroname = "bob"
 	HS.Command( "name" )
-	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][8] )
+	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][7] )
 end
 function test.test_help()
 	-- going to be hard to test unless the help (print) gets captured
@@ -79,12 +79,32 @@ function test.test_remove_normal()
 end
 function test.test_update()
 	HS_settings.normal[1] = "165670"
-	assertEquals( "/use item:6948", HS_settings.macro[3] )
+	assertEquals( "/use item:6948#HS", HS_settings.macro[2] )
 	HS.Command( "update" )
-	assertEquals( "/use item:165670", HS_settings.macro[3] )
+	assertEquals( "/use item:165670#HS", HS_settings.macro[2] )
 end
 function test.test_macroSize()
-	assertEquals( 31, string.len( myMacros.general[1].text ))
+	assertEquals( 30, string.len( myMacros.general[1].text ) )
+end
+function test.test_long_macro_old_method_does_not_destroy()
+	EditMacro( "testmacro", nil, nil, "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n#hs\n/use item:1234\n123456789012345678901234567890\n2345")
+	HS.Command( "update" )
+	assertEquals( 255, string.len( myMacros.general[1].text ) )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:1234" ) )
+end
+function test.test_long_macro_post_edit_works_ok()
+	EditMacro( "testmacro", nil, nil, "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:4321#hs\n123456789012345678901234567890\n12345")
+	HS.Command( "update" )
+	assertEquals( 255, string.len( myMacros.general[1].text ) )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ) )
+	assertTrue( string.find( myMacros.general[1].text, "12345$" ) )
+end
+function test.test_old_macro_to_new_macro_is_weird()
+	EditMacro( "testmacro", nil, nil, "#showtooltip\n#hs\n/use item:1234" )
+	HS.Command( "update" )
+	assertEquals( 45, string.len( myMacros.general[1].text ), "New macro is longer." )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:1234" ), "/use item:1234 should still be here." )
+	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ), "/use item:6948 should not be inserted." )
 end
 
 test.run()

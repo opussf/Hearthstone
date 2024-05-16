@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  May 13 2024
--- Revision:  9.4.2
+-- Date    :  May 15 2024
+-- Revision:  9.4.3
 -----------------------------------------
 -- These are functions from wow that have been needed by addons so far
 -- Not a complete list of the functions.
@@ -1707,7 +1707,6 @@ end
 ----------
 -- Macros
 ----------
---myMacros = {}
 myMacros = {
 	["general"] = {},  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
 	["personal"] = {}, -- 1-18 = personal (+120)
@@ -1716,19 +1715,6 @@ myMacros = {
 		table.sort( myMacros.personal, function( l, r ) return( l.name < r.name ); end )
 	end,
 }
--- function test.PairsByKeys( t, f )  -- This is an awesome function I found
--- 	local a = {}
--- 	for n in pairs( t ) do table.insert( a, n ) end
--- 	table.sort( a, f )
--- 	local i = 0
--- 	local iter = function()
--- 		i = i + 1
--- 		if a[i] == nil then return nil
--- 		else return a[i], t[a[i]]
--- 		end
--- 	end
--- 	return iter
--- end
 function GetMacroInfo( macroName )
 	-- returns:  macroName, macroIcon, macroText
 	if macroName then
@@ -1767,9 +1753,10 @@ function CreateMacro( macroName, macroIcon, macroText, perChar )
 	end
 end
 function EditMacro( macroName, newName, newIcon, body )
+	-- macroName is name or index
 	-- returns: new macroID
 	if macroName then
-		local mIndex = GetMacroIndexByName( macroName )
+		mIndex = tonumber(macroName) or GetMacroIndexByName( macroName )
 		if mIndex ~= 0 then
 			local location = mIndex > 120 and "personal" or "general"
 			mIndex = mIndex>120 and mIndex-120 or mIndex
