@@ -1,6 +1,6 @@
 ## Title: HearthStone
 ## Interface: @INTERFACE@
-## Notes: HearthStone (@VERSION@)
+## Notes: HearthStone (v@VERSION@)
 ## Author: opussf
 ## Version: @VERSION@
 ## Description: Allows building a Hearthstone macro with random stones
