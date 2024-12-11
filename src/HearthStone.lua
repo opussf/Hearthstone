@@ -155,7 +155,7 @@ function HS.GetItemFromList( list )
 	if list then
 		local returnItem
 		if #list == 1 then
-			HS.LogMsg( "Only 1 item found in given list: "..list[1] )
+			HS.LogMsg( "Only 1 item found in given list: "..list[1], HS_settings.debug )
 			returnItem = list[1]
 		else
 			local r
