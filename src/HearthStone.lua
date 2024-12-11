@@ -57,19 +57,12 @@ function HS.OnLoad()
 	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
 
 	HSFrame:RegisterEvent( "LOADING_SCREEN_DISABLED" )
+	HSFrame:RegisterEvent( "PLAYER_STARTED_MOVING" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_DISABLED" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_ENABLED" )
 
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	HSFrame:RegisterEvent( "TOYS_UPDATED" )
-end
-function HS.OnUpdate()
-	HS.LogMsg( "OnUpdate", HS_settings.debug )
-	if HS.lastToysUpdated and HS.lastToysUpdated + 1 > time() then
-		HS.UpdateMacro()
-		HS.LogMsg( "Remove OnUpdate", HS_settings.debug )
-		HSFrame:SetScript( "OnUpdate", nil )
-	end
 end
 function HS.TOYS_UPDATED()
 	HS.lastToysUpdated = time()
@@ -90,7 +83,14 @@ end
 function HS.LOADING_SCREEN_DISABLED()
 	HS.LogMsg( "LOADING_SCREEN_DISABLED", HS_settings.debug )
 	HS.PruneLog()
-	HS.UpdateMacro()
+	HS.shouldUpdateMacro = true
+end
+function HS.PLAYER_STARTED_MOVING()
+	if HS.shouldUpdateMacro then
+		HS.LogMsg( "PLAYER_STARTED_MOVING and shouldUpdateMacro", HS_settings.debug )
+		HS.shouldUpdateMacro = nil
+		HS.UpdateMacro()
+	end
 end
 function HS.UpdateMacro()
 	if HS.inCombat then

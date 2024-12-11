@@ -1951,6 +1951,8 @@ end
 ----------
 C_Timer = {}
 function C_Timer.After( seconds, callback )
+	-- just call the callback
+	callback()
 end
 
 ----------
