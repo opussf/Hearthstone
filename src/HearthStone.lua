@@ -163,7 +163,7 @@ function HS.GetItemFromList( list )
 			local count = 0
 			while( not r and count <= limit ) do
 				r = random(#list)
-				HS.LogMsg( "Picking "..r.."/"..#list.." ("..list[r]..")", HS_settings.debug )
+				HS.LogMsg( "Picking "..r.."/"..#list.." ("..list[r]..") "..(select(2, GetItemInfo(list[r])) or "nil"), HS_settings.debug )
 				count = count + 1
 				if list[r] == "6948" then
 					HS.LogMsg("HearthStone: "..(GetItemCount(list[r]) or "no count"), HS_settings.debug)
