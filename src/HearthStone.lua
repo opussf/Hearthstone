@@ -388,6 +388,10 @@ HS.commandList = {
 		["func"] = HS.Mods,
 		["help"] = {"", HS.L["List known modifers"]}
 	},
+	[HS.L["list"]] = {
+		["func"] = HS.Add,
+		["help"] = {HS.L["<mods>"], HS.L["List toys for a modifier"]}
+	},
 	[HS.L["debug"]] = {
 		["func"] = function() HS_settings.debug = not HS_settings.debug; HS.Print( "Debug is now: "..(HS_settings.debug and "on" or "off")); end,
 		--["help"] = {"", "Toggle Debug"}
