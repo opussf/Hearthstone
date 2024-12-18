@@ -3,8 +3,8 @@
 require "wowTest"
 --myLocale = "esMX"
 
-test.coberturaFileName = "../coverage.xml"
 test.outFileName = "testOut.xml"
+test.coberturaFileName = "../coverage.xml"
 
 -- require the file to test
 ParseTOC( "../src/HearthStone.toc" )
@@ -24,6 +24,7 @@ function test.before()
 	HS.inCombat = nil
 	HS.OnLoad()
 	HS.LOADING_SCREEN_DISABLED()
+	HS.PLAYER_STARTED_MOVING()
 end
 function test.after()
 end
@@ -52,7 +53,7 @@ end
 function test.test_getName()
 	HS_settings.macroname = "bob"
 	HS.Command( "name" )
-	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][7] )
+	assertEquals( "HearthStone macro name is currently: bob", HS_log[time()][8] )
 end
 function test.test_help()
 	-- going to be hard to test unless the help (print) gets captured
@@ -84,6 +85,7 @@ function test.test_update()
 	assertEquals( "/use item:165670#HS", HS_settings.macro[2] )
 end
 function test.test_macroSize()
+	HS.PLAYER_STARTED_MOVING()
 	assertEquals( 30, string.len( myMacros.general[1].text ) )
 end
 function test.test_long_macro_old_method_does_not_destroy()
