@@ -11,4 +11,12 @@
 			</OnEvent>
 		</Scripts>
 	</Frame>
+	<Frame name="HSConfig" toplevel="false" parent="UIParent" enableMouse="true" movable="true" resizable="false">
+		<Size x="400" y="400" />
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+		</Layers>
+	</Frame>
 </Ui>
