@@ -25,6 +25,14 @@
 			<Anchor point="CENTER"/>
 		</Anchors>
 		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_BG" file="Interface\DialogFrame\UI-DialogBox-Background">
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
 			<Layer level="ARTWORK">
 				<!-- Header -->
 				<FontString name="$parent_Header" inherits="GameFontNormalLarge" text="HearthStone @VERSION@">
@@ -36,7 +44,6 @@
 				</FontString>
 			</Layer>
 		</Layers>
-
 		<Frames>
 			<Button name="$parent_Close" inherits="UIPanelCloseButton" parent="HSThingy">
 				<Anchors>
@@ -45,11 +52,20 @@
 					</Anchor>
 				</Anchors>
 			</Button>
-			<Frame name="$parent_TabPanels" parentKey="tabPanels" toplevel="true" FrameStrata="MEDIUM" inherits="BasicFrameTemplateWithInset" hidden="true">
-				<Size x="300" y="420" />
+			<Frame name="$parent_TabPanels" parentKey="tabPanels" hidden="false">
+				<Size x="600" y="420"/>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="UIParent" relativePoint="LEFT" x="500" y="100"/>
+					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+						<!-- <Offset x="20" y="-50" /> -->
+					</Anchor>
 				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color r="0.5" g="0.0" b="0.0" a="1" />
+						</Texture>
+					</Layer>
+				</Layers>
 				<Frames>
 					<Button name="$parent_Tab1" parentKey="tab1" inherits="MinimalTabTemplate" hidden="false">
 						<Anchors>
@@ -58,13 +74,13 @@
 						<Scripts>
 							<OnLoad>
 								self.tabText = "Tags"
-									self:OnLoad()
+								self:OnLoad()
 								self:SetSelected(true)
 							</OnLoad>
+							<OnClick>
+								self:OnClick()
+							</OnClick>
 						</Scripts>
-						<Frames>
-
-						</Frames>
 					</Button>
 					<Button name="$parent_Tab2" parentKey="tab2" inherits="MinimalTabTemplate" hidden="false">
 						<Anchors>
@@ -88,13 +104,38 @@
 							</OnLoad>
 						</Scripts>
 					</Button>
+				</Frames>
+			</Frame>
+			<!-- <Frame name="$parent_TabPanels" parentKey="tabPanels" toplevel="true" FrameStrata="MEDIUM" inherits="BasicFrameTemplateWithInset" hidden="true">
+				<Size x="300" y="420" />
+				<Anchors>
+					<Anchor point="CENTER" relativeTo="UIParent" relativePoint="LEFT" x="500" y="100"/>
+				</Anchors>
+				<Frames>
+					<Button name="$parent_Tab1" parentKey="tab1" inherits="MinimalTabTemplate" hidden="false">
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT"/>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								self.tabText = "Tags"
+								self:OnLoad()
+								self:SetSelected(true)
+							</OnLoad>
+							<OnClick>
+								self:OnClick()
+							</OnClick>
+						</Scripts>
+						<Frames>
+
+						</Frames>
+					</Button>
+
 
 				</Frames>
 			</Frame>
 
-
-
-
+ -->
 			<!--
 			<Button name="$parent_B1" inherits="UIPanelButtonTemplate" frameStrata="MEDIUM">
 				<Layers>
@@ -106,16 +147,6 @@
 				</Layers>
 			</Button> -->
 		</Frames>
-		<Layers>
-			<Layer level="BACKGROUND">
-				<Texture name="$parent_BG" file="Interface\DialogFrame\UI-DialogBox-Background">
-					<Anchors>
-						<Anchor point="TOPLEFT"/>
-						<Anchor point="BOTTOMRIGHT"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-		</Layers>
 		<Scripts>
 		</Scripts>
 	</Frame>
