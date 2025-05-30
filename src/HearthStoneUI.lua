@@ -1,6 +1,6 @@
 HS_SLUG, HS      = ...
 HS.commandList["config"] = {
-	["func"] = function() HSThingy:Show() end,
+	["func"] = function() HSConfig:Show() end,
 	["help"] = {"", "Config"}
 }
 

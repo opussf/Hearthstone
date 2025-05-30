@@ -177,7 +177,7 @@ function HS.GetItemFromList( list )
 				end
 			end
 			if r then
-				HS.LogMsg( "Choise of "..r.." is valid." )
+				HS.LogMsg( "Choice of "..r.." is valid." )
 				returnItem = list[r]
 			end
 		end

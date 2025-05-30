@@ -19,7 +19,7 @@
 		<Layers>
 		</Layers>
 	</Frame> -->
-	<Frame name="HSThingy" toplevel="true" parent="UIParent" enableMouse="true" movable="true" resizable="false">
+	<Frame name="HSConfig" toplevel="true" parent="UIParent" enableMouse="true" movable="true" resizable="false">
 		<Size x="700" y="500" />
 		<Anchors>
 			<Anchor point="CENTER"/>
@@ -45,7 +45,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button name="$parent_Close" inherits="UIPanelCloseButton" parent="HSThingy">
+			<Button name="$parent_Close" inherits="UIPanelCloseButton" parent="HSConfig">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset x="0" y="0"/>
@@ -87,7 +87,7 @@
 							<Frame name="$parent_Contents" parentKey="contents" hidden="false">
 								<Size x="500" y="320"/>
 								<Anchors>
-									<Anchor point="CENTER" relativeTo="HSThingy" relativePoint="CENTER"/>
+									<Anchor point="TOPLEFT" relativeTo="HSConfig_TabPanels" relativePoint="TOPLEFT"/>
 								</Anchors>
 								<Layers>
 									<Layer level="BACKGROUND">
@@ -96,6 +96,36 @@
 										</Texture>
 									</Layer>
 								</Layers>
+								<Frames>
+									<Editbox name="$parent_TagEditBox"  parentKey="TagEditBox" multiline="true" enableMouse="false" >
+										<Size x="300" y="100"/>
+										<Anchors>
+											<Anchor point="TOPLEFT" relativeTo="HSConfig_TabPanels_Tab1_Contents" relativePoint="TOPLEFT"/>
+											<Anchor point="BOTTOMRIGHT" relativeTo="HSConfig_TabPanels_Tab1_Contents" relativePoint="BOTTOMRIGHT"/>
+										</Anchors>
+										<FontString inherits="ChatFontNormal"/>
+										<Layers>
+											<Layer level="BACKGROUND">
+												<Texture setAllPoints="true">
+													<Color r="0.0" g="0.0" b="0.0" a="1" />
+												</Texture>
+											</Layer>
+										</Layers>
+
+										<Scripts>
+											<OnLoad>
+												self:SetAutoFocus(false)
+												self:SetText("Enter text here...")
+											</OnLoad>
+											<OnShow>
+												print(self:GetName())
+												print(self:GetParent():GetName())
+											</OnShow>
+										</Scripts>
+
+									</Editbox>
+								</Frames>
+
 							</Frame>
 						</Frames>
 					</Button>
@@ -118,7 +148,7 @@
 							<Frame name="$parent_Contents" parentKey="contents" hidden="true">
 								<Size x="500" y="320"/>
 								<Anchors>
-									<Anchor point="CENTER" relativeTo="HSThingy" relativePoint="CENTER"/>
+									<Anchor point="CENTER" relativeTo="HSConfig" relativePoint="CENTER"/>
 								</Anchors>
 								<Layers>
 									<Layer level="BACKGROUND">
@@ -149,7 +179,7 @@
 							<Frame name="$parent_Contents" parentKey="contents" hidden="true">
 								<Size x="500" y="320"/>
 								<Anchors>
-									<Anchor point="CENTER" relativeTo="HSThingy" relativePoint="CENTER"/>
+									<Anchor point="CENTER" relativeTo="HSConfig" relativePoint="CENTER"/>
 								</Anchors>
 								<Layers>
 									<Layer level="BACKGROUND">
@@ -171,7 +201,7 @@
 <!--
 
 /run SetRaidDifficultyID(16)
-/script HSThingy:Show()
-/script HSThingy:Hide()
+/script HSConfig:Show()
+/script HSConfig:Hide()
 
 -->
