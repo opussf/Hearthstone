@@ -19,7 +19,8 @@ HS_log = {}
 HS_settings = {}
 
 HS_settings = {
-	["normal"] = {"6948"}  -- default to get you going.   Can remove
+	["normal"] = {"6948"},  -- default to get you going.   Can remove
+	["tags"] = {},
 }
 HS.modOrder = {
 	"shiftctrlalt", "shiftctrl", "shiftalt", "shift", "ctrlalt", "ctrl", "alt"

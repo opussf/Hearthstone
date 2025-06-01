@@ -22,3 +22,23 @@ function HS.MakeTabActive( self )
 		self.contents:Hide()
 	end
 end
+
+function HS.TagsEditFocusLost(self)
+	local thing = {}
+	HS.ListToTable( self:GetText(), thing )
+	local oldTags = HS_settings.tags or {}
+	HS_settings.tags = {}
+	for i,tag in ipairs( thing ) do
+		if string.sub(tag,1,1) ~= "#" then -- if it does NOT start with #, add it
+			tag = "#"..tag
+		end
+		HS_settings.tags[tag] = oldTags[tag] or {}
+	end
+end
+function HS.TagsToEdit(self)
+	local tags = {}
+	for t in pairs( HS_settings.tags ) do table.insert( tags, t ) end
+	table.sort( tags )
+	self:SetText( table.concat( tags, "\n" ) )
+end
+

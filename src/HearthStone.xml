@@ -97,7 +97,7 @@
 									</Layer>
 								</Layers>
 								<Frames>
-									<Editbox name="$parent_TagEditBox"  parentKey="TagEditBox" multiline="true" enableMouse="false" >
+									<Editbox name="$parent_TagEditBox" parentKey="TagEditBox" multiline="true" enableMouse="false">
 										<Size x="300" y="100"/>
 										<Anchors>
 											<Anchor point="TOPLEFT" relativeTo="HSConfig_TabPanels_Tab1_Contents" relativePoint="TOPLEFT"/>
@@ -111,18 +111,18 @@
 												</Texture>
 											</Layer>
 										</Layers>
-
 										<Scripts>
 											<OnLoad>
 												self:SetAutoFocus(false)
-												self:SetText("Enter text here...")
+													self:SetText("#hs")
 											</OnLoad>
 											<OnShow>
-												print(self:GetName())
-												print(self:GetParent():GetName())
+												HS.TagsToEdit(self)
 											</OnShow>
+											<OnEditFocusLost>
+												HS.TagsEditFocusLost(self)
+											</OnEditFocusLost>
 										</Scripts>
-
 									</Editbox>
 								</Frames>
 
