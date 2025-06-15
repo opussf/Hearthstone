@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  April 24 2025
--- Revision:  9.5.1
+-- Date    :  June 15 2025
+-- Revision:  9.5.1-2-gdbed7d6
 -----------------------------------------
 -- These are functions from wow that have been needed by addons so far
 -- Not a complete list of the functions.
@@ -30,6 +30,14 @@ chatLog = {
 
 local itemDB = {
 }
+
+_G["GUILD"] = "Guild"
+_G["INSTANCE"] = "instance"
+_G["PARTY"] = "Party"
+_G["RAID"] = "Raid"
+_G["SAY"] = "Say"
+_G["WHISPER"] = "Whisper"
+_G["YELL"] = "Yell"
 
 -- simulate an internal inventory
 -- myInventory = { ["9999"] = 52, }
@@ -1201,9 +1209,25 @@ function GetNumRoutes( nodeId )
 	-- returns numHops
 	return TaxiNodes[nodeId].hops
 end
+mySavedInstances = {}
+-- mySavedInstances = { { "raidName", id, secondsUntilLockResets, difficulty(number),
+--      isLocked(bool), isExtended(bool), instanceIDMostSig?(number), isRaid(bool),
+--      maxPlayers(number), "difficulty", numEncounters(number), encounterProgress(number),
+--      {{bossName, fileDataID, isKilled, unknown}, {}, ...} }, {}, ... }
 function GetNumSavedInstances()
-	-- @TODO: Research this
-	return 0
+	-- https://addonstudio.org/wiki/WoW:API_GetNumSavedInstances
+	--     numInstances (Number) - number of instances saved to, zero if none
+	-- See GetSavedInstanceInfo
+	return #mySavedInstances
+end
+function GetSavedInstanceInfo( index )
+	-- https://addonstudio.org/wiki/WoW:API_GetSavedInstanceInfo
+	-- name, id, reset, difficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(index)
+	-- add the above info as a table to mySavedInstances
+	return table.unpack( mySavedInstances[index] )
+end
+function GetSavedInstanceEncounterInfo( raidIndex, bossIndex )
+	return table.unpack( mySavedInstances[raidIndex][13][bossIndex] )
 end
 -- GetNumTradeSkills is deprecated
 --function GetNumTradeSkills( )

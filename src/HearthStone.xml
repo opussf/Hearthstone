@@ -114,7 +114,7 @@
 										<Scripts>
 											<OnLoad>
 												self:SetAutoFocus(false)
-													self:SetText("#hs")
+												self:SetText("#hs")
 											</OnLoad>
 											<OnShow>
 												HS.TagsToEdit(self)

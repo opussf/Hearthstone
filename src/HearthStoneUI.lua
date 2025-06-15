@@ -41,4 +41,3 @@ function HS.TagsToEdit(self)
 	table.sort( tags )
 	self:SetText( table.concat( tags, "\n" ) )
 end
-
