@@ -52,153 +52,135 @@
 					</Anchor>
 				</Anchors>
 			</Button>
-			<Frame name="$parent_TabPanels" parentKey="tabPanels" hidden="false">
-				<Size x="600" y="420"/>
+			<Frame name="$parent_TagDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="TagDropDownMenu">
+				<Size x="50" y="16" />
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
-						<!-- <Offset x="20" y="-50" /> -->
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="0" y="-42"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
+				</Scripts>
+			</Frame>
+			<Button name="$parent_DelTagButton" parentKey="DelTagButton" inherits="UIPanelButtonTemplate" text="Delete">
+				<Size x="76" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="170" y="-42" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="$parent_EditTagButton" parentKey="EditTagButton" inherits="UIPanelButtonTemplate" text="Rename">
+				<Size x="76" y="16" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_DelTagButton">
+						<Offset>
+							<AbsDimension x="120" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<EditBox name="$parent_TagEditBox" parentKey="TagEditBox" inherits="InputBoxTemplate">
+				<Size x="150" y="30" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_EditTagButton">
+						<Offset>
+							<AbsDimension x="10" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetAutoFocus( false )</OnLoad>
+					<!-- <OnTextChanged>Rested.updateFilter()</OnTextChanged> -->
+				</Scripts>
+			</EditBox>
+			<Button name="$parent_AddTagButton" parentKey="AddTagButton" inherits="UIPanelButtonTemplate" text="Add">
+				<Size x="76" y="16" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_TagEditBox">
+						<Offset>
+							<AbsDimension x="10" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Frame name="$parent_ModifierDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="ModifierDropDownMenu">
+				<Size x="50" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="30" y="-84"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
+				</Scripts>
+			</Frame>
+			<Frame name="$parent_ToyList" parentKey="ToyList">
+				<Size x="500" y="320"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="30" y="-150" />
+						</Offset>
 					</Anchor>
 				</Anchors>
 				<Layers>
 					<Layer level="BACKGROUND">
 						<Texture setAllPoints="true">
-							<Color r="0.5" g="0.0" b="0.0" a="1" />
+							<Color r="0.75" g="0.75" b="0.75" a="1" />
 						</Texture>
 					</Layer>
 				</Layers>
-				<Frames>
-					<Button name="$parent_Tab1" parentKey="tab1" inherits="MinimalTabTemplate" hidden="false">
-						<Anchors>
-							<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT"/>
-						</Anchors>
-						<Scripts>
-							<OnLoad>
-								self.tabText = "Tags"
-								self:OnLoad()
-								self:SetSelected(true)
-								HS.MakeTabActive(self)
-							</OnLoad>
-							<OnClick>
-								self:OnClick()
-								HS.MakeTabActive(self)
-							</OnClick>
-						</Scripts>
-						<Frames>
-							<Frame name="$parent_Contents" parentKey="contents" hidden="false">
-								<Size x="500" y="320"/>
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="HSConfig_TabPanels" relativePoint="TOPLEFT"/>
-								</Anchors>
-								<Layers>
-									<Layer level="BACKGROUND">
-										<Texture setAllPoints="true">
-											<Color r="0.0" g="0.5" b="0.0" a="1" />
-										</Texture>
-									</Layer>
-								</Layers>
-								<Frames>
-									<Editbox name="$parent_TagEditBox" parentKey="TagEditBox" multiline="true" enableMouse="false">
-										<Size x="300" y="100"/>
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="HSConfig_TabPanels_Tab1_Contents" relativePoint="TOPLEFT"/>
-											<Anchor point="BOTTOMRIGHT" relativeTo="HSConfig_TabPanels_Tab1_Contents" relativePoint="BOTTOMRIGHT"/>
-										</Anchors>
-										<FontString inherits="ChatFontNormal"/>
-										<Layers>
-											<Layer level="BACKGROUND">
-												<Texture setAllPoints="true">
-													<Color r="0.0" g="0.0" b="0.0" a="1" />
-												</Texture>
-											</Layer>
-										</Layers>
-										<Scripts>
-											<OnLoad>
-												self:SetAutoFocus(false)
-												self:SetText("#hs")
-											</OnLoad>
-											<OnShow>
-												HS.TagsToEdit(self)
-											</OnShow>
-											<OnEditFocusLost>
-												HS.TagsEditFocusLost(self)
-											</OnEditFocusLost>
-										</Scripts>
-									</Editbox>
-								</Frames>
 
-							</Frame>
-						</Frames>
-					</Button>
-					<Button name="$parent_Tab2" parentKey="tab2" inherits="MinimalTabTemplate" hidden="false">
-						<Anchors>
-							<Anchor point="LEFT" relativeTo="$parent_Tab1" relativePoint="RIGHT"/>
-						</Anchors>
-						<Scripts>
-							<OnLoad>
-								self.tabText = "Toys"
-								self:OnLoad()
-								HS.MakeTabActive(self)
-							</OnLoad>
-							<OnClick>
-								self:OnClick()
-								HS.MakeTabActive(self)
-							</OnClick>
-						</Scripts>
-						<Frames>
-							<Frame name="$parent_Contents" parentKey="contents" hidden="true">
-								<Size x="500" y="320"/>
-								<Anchors>
-									<Anchor point="CENTER" relativeTo="HSConfig" relativePoint="CENTER"/>
-								</Anchors>
-								<Layers>
-									<Layer level="BACKGROUND">
-										<Texture setAllPoints="true">
-											<Color r="0.0" g="0.0" b="0.5" a="1" />
-										</Texture>
-									</Layer>
-								</Layers>
-							</Frame>
-						</Frames>
-					</Button>
-					<Button name="$parent_Tab3" parentKey="tab3" inherits="MinimalTabTemplate" hidden="false">
-						<Anchors>
-							<Anchor point="LEFT" relativeTo="$parent_Tab2" relativePoint="RIGHT"/>
-						</Anchors>
-						<Scripts>
-							<OnLoad>
-								self.tabText = "Config"
-								self:OnLoad()
-								HS.MakeTabActive(self)
-							</OnLoad>
-							<OnClick>
-								self:OnClick()
-								HS.MakeTabActive(self)
-							</OnClick>
-						</Scripts>
-						<Frames>
-							<Frame name="$parent_Contents" parentKey="contents" hidden="true">
-								<Size x="500" y="320"/>
-								<Anchors>
-									<Anchor point="CENTER" relativeTo="HSConfig" relativePoint="CENTER"/>
-								</Anchors>
-								<Layers>
-									<Layer level="BACKGROUND">
-										<Texture setAllPoints="true">
-											<Color r="0.75" g="0.75" b="0.75" a="1" />
-										</Texture>
-									</Layer>
-								</Layers>
-							</Frame>
-						</Frames>
-					</Button>
-				</Frames>
 			</Frame>
+
 		</Frames>
 		<Scripts>
 		</Scripts>
 	</Frame>
 </Ui>
 <!--
+
+<Slider name="RestedScrollFrame_VSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
+				<Size x="12" y="82"/>
+				<Anchors>
+					<Anchor point="Right" relativePoint="RIGHT" relativeTo="RestedScrollFrame"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetValue(0)</OnLoad>
+					<OnValueChanged>Rested.UIUpdateFrame()</OnValueChanged>
+				</Scripts>
+				<ThumbTexture name="$parentThumbTexture"
+						file="Interface\Buttons\UI-ScrollBar-Knob">
+					<Size x="12" y="25"/>
+				</ThumbTexture>
+			</Slider>
+	<Button name="$parent_TestEmoteButton" inherits="UIPanelButtonTemplate" text="Test Emote">
+				<Size>
+					<AbsDimension x="120" y="24"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parent_DoEmoteEditBox" relativePoint="RIGHT" >
+						<Offset><AbsDimension x="10" y="0" /></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						local emote = _G[self:GetParent():GetName() .."_DoEmoteEditBox"]:GetText();
+						if _G[self:GetParent():GetName() .."_DoEmote"]:GetChecked() then
+							DoEmote( emote )
+						end
+					</OnClick>
+				</Scripts>
+			</Button>
+
 
 /run SetRaidDifficultyID(16)
 /script HSConfig:Show()
