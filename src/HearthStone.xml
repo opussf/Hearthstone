@@ -11,14 +11,6 @@
 			</OnEvent>
 		</Scripts>
 	</Frame>
-	<!-- <Frame name="HSConfig" toplevel="false" parent="UIParent" enableMouse="true" movable="true" resizable="false">
-		<Size x="400" y="400" />
-		<Anchors>
-			<Anchor point="CENTER"/>
-		</Anchors>
-		<Layers>
-		</Layers>
-	</Frame> -->
 	<Frame name="HSConfig" toplevel="true" parent="UIParent" enableMouse="true" movable="true" resizable="false">
 		<Size x="700" y="500" />
 		<Anchors>
@@ -62,6 +54,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
+					<!-- <OnLoad>HS.UIDropDownOnLoad(self)</OnLoad> -->
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
@@ -127,7 +120,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent">
 						<Offset>
-							<AbsDimension x="30" y="-150" />
+							<AbsDimension x="50" y="-120" />
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -143,6 +136,7 @@
 
 		</Frames>
 		<Scripts>
+			<OnLoad>self:Hide()</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>

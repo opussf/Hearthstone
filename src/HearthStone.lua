@@ -56,7 +56,7 @@ end
 function HS.OnLoad()
 	SLASH_HS1 = "/hs"
 	SlashCmdList["HS"] = function(msg) HS.Command(msg); end
-
+	HSFrame:RegisterEvent( "PLAYER_LOGIN" )
 	HSFrame:RegisterEvent( "LOADING_SCREEN_DISABLED" )
 	HSFrame:RegisterEvent( "PLAYER_STARTED_MOVING" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_DISABLED" )
@@ -64,6 +64,17 @@ function HS.OnLoad()
 
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	HSFrame:RegisterEvent( "TOYS_UPDATED" )
+end
+function HS.PLAYER_LOGIN( )
+	if not HS_settings.tags then
+		HS_settings.tags = {}
+		HS_settings.tags["#hs"] = {}
+		HS_settings.tags["#hs"].normal = HS_settings.normal
+		for _, mod in pairs( HS.modOrder ) do
+			HS_settings.tags["#hs"][mod] = HS_settings[mod]
+		end
+		HS_settings.tags["#hs"].macroname = { HS_settings.macroname }
+	end
 end
 function HS.TOYS_UPDATED()
 	HS.lastToysUpdated = time()
