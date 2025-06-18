@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  June 15 2025
--- Revision:  9.5.1-2-gdbed7d6
+-- Date    :  June 18 2025
+-- Revision:  9.5.1-4-g0e1c5a5
 -----------------------------------------
 -- These are functions from wow that have been needed by addons so far
 -- Not a complete list of the functions.
@@ -1893,7 +1893,7 @@ function GetMacroInfo( macroName )
 			if myMacros[location][mIndex] then
 				return myMacros[location][mIndex].name, myMacros[location][mIndex].icon, myMacros[location][mIndex].text
 			end
-    	end
+		end
 	end
 end
 function GetMacroIndexByName( macroName )

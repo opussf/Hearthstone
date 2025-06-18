@@ -6,13 +6,18 @@ HS.commandList["config"] = {
 
 function HS.TagDropDownInitialize( self, level, menuList )
 	print( self, level, menuList )
-	local tagList = {"#hs"}
+	local tagList = {}
+
+	for hash in pairs( HS_settings.tags ) do
+		table.insert( tagList, hash )
+	end
+	table.sort( tagList )
 	for _, tag in ipairs( tagList ) do
 		info = UIDropDownMenu_CreateInfo()
 		info.text = tag
 		info.notCheckable = true
-		-- info.arg1 =
-		-- info.func = func
+		info.arg1 = tag
+		info.func = HS.SetTagForEdit
 		UIDropDownMenu_AddButton( info, level )
 	end
 end
@@ -22,6 +27,9 @@ function HS.UIDropDownOnLoad( self )
 		print(k,v)
 	end
 	UIDropDownMenu_Initialize( self, HS.TagDropDownInitialize )
+end
+function HS.SetTagForEdit( hash )
+	print( "SetTagForEdit( "..hash.." )" )
 end
 
 
