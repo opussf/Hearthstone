@@ -79,7 +79,7 @@ function HS.PLAYER_LOGIN( )
 		for _, mod in pairs( HS.modOrder ) do
 			HS_settings.tags["#hs"][mod] = HS_settings[mod]
 		end
-		HS_settings.tags["#hs"].macroname = { HS_settings.macroname }
+		-- HS_settings.tags["#hs"].macroname = { HS_settings.macroname }
 	end
 end
 -- function HS.TOYS_UPDATED()
@@ -116,12 +116,12 @@ end
 function HS.MakeUseLine( hash )
 	local hsLine = "/use "
 	for _, modKey in ipairs( HS.modOrder ) do
-		if HS_settings[hash][modKey] then
+		if HS_settings.tags[hash][modKey] then
 			HS.LogMsg( "List: "..modKey, HS_settings.debug )
 			hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[hash][modKey])..";"
 		end
 	end
-	hsLine = hsLine..(HS.GetItemFromList(HS_settings[hash].normal) or "")..hash
+	hsLine = hsLine..(HS.GetItemFromList(HS_settings.tags[hash].normal) or "")..hash
 	return hsLine
 end
 function HS.UpdateMacros()
@@ -142,8 +142,8 @@ function HS.UpdateMacros()
 			HS.LogMsg( macroIndex..":"..(name or "?")..":"..(body or "nil") )
 			HS.ListToTable( body, HS.macroTable )
 			for lnum, line in ipairs( HS.macroTable ) do
-				HS.LogMsg( lnm.."> "..line )
-				s, e, hash = line:strfind( "(#%S+)$" )
+				s, e, hash = strfind( line, "(#%S+)$" )
+				HS.LogMsg( lnum.."> "..line.." "..(s or "").."->"..(e or "").."="..(hash or "nil") )
 				if hash and not HS.hashIgnore[hash] then
 					HS.macroTable[lnum] = HS.MakeUseLine( hash )
 				end
