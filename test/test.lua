@@ -69,8 +69,6 @@ function test.test_update_simple()
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
 	HS.Command( "update" )
 	assertEquals( "/use item:165670#hs", myMacros.general[1].text )
-	-- print("---\nHS_log")
-	-- test.dump(HS_log)
 end
 function test.test_update_show()
 	HS_settings.tags["#hs"].normal[1] = "165670"
@@ -88,9 +86,19 @@ function test.test_update_complex()
 	HS_settings.tags["#hs"].normal[1] = "5567"
 	HS_settings.tags["#hs"]["alt"] = { "1234" }
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
-	test.dump(HS_settings)
 	HS.Command( "update" )
 	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
+end
+function test.test_update_seeds()
+	-- this macro caused some problems
+	HS_settings.tags["#hs"].normal[1] = "5567"
+	myMacros.general = { { ["name"] = "seeds", ["icon"] = "",
+			["text"] = "#longmacro\n#showtooltip\n/click [btn:5]LongMacro_LM-Seeds Button5; [btn:4]LongMacro_LM-Seeds Button4; [btn:3]LongMacro_LM-Seeds MiddleButton; [btn:2]LongMacro_LM-Seeds RightButton; LongMacro_LM-Seeds\n"
+	} }
+	HS.Command( "update" )
+	assertEquals( "#longmacro\n#showtooltip\n/click [btn:5]LongMacro_LM-Seeds Button5; [btn:4]LongMacro_LM-Seeds Button4; [btn:3]LongMacro_LM-Seeds MiddleButton; [btn:2]LongMacro_LM-Seeds RightButton; LongMacro_LM-Seeds",
+			myMacros.general[1].text
+	)
 end
 function test.test_long_macro_old_method_does_not_destroy()
 	myMacros.general = { { ["name"] = "testmacro", ["icon"] = "",

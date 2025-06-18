@@ -107,18 +107,21 @@ function HS.PLAYER_STARTED_MOVING()
 	end
 end
 function HS.UPDATE_MACROS()
+	if HS.suspendUpdateEvent then return; end
 	HS.LogMsg( "UPDATE_MACROS", true )
 end
 function HS.MakeUseLine( hash )
-	local hsLine = "/use "
-	for _, modKey in ipairs( HS.modOrder ) do
-		if HS_settings.tags[hash][modKey] then
-			HS.LogMsg( "List: "..modKey, HS_settings.debug )
-			hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings.tags[hash][modKey])..";"
+	if HS_settings.tags[hash] then
+		local hsLine = "/use "
+		for _, modKey in ipairs( HS.modOrder ) do
+			if HS_settings.tags[hash][modKey] then
+				HS.LogMsg( "List: "..modKey, HS_settings.debug )
+				hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings.tags[hash][modKey])..";"
+			end
 		end
+		hsLine = hsLine..(HS.GetItemFromList(HS_settings.tags[hash].normal) or "")..hash
+		return hsLine
 	end
-	hsLine = hsLine..(HS.GetItemFromList(HS_settings.tags[hash].normal) or "")..hash
-	return hsLine
 end
 function HS.UpdateMacros()
 	if HS.inCombat then
@@ -127,33 +130,34 @@ function HS.UpdateMacros()
 	end
 	-- Update Macros
 	HS.LogMsg( "Update Macro", HS_settings.debug )
+	HS.suspendUpdateEvent = true
 
 	-- loop through all macros
 	-- look for #hash comments at the end of the line.
-	HS.macroTable = {}
 	local numGlobal, numCharacter = GetNumMacros()
-	HS.LogMsg( "Global: 1-"..numGlobal, true )
-	for macroIndex = 1, 120+numCharacter do
+	for macroIndex = 1, 120+numCharacter do  -- can do 2 loops, or 1 loop and not update unnamed macros.
 		local name, _, body = GetMacroInfo( macroIndex )
 		if name then
 			HS.LogMsg( macroIndex..":"..(name or "?")..":"..(body or "nil") )
+			HS.macroTable = {}
 			HS.ListToTable( body, HS.macroTable )
 			for lnum, line in ipairs( HS.macroTable ) do
 				s, e, hash = strfind( line, "(#%S+)$" )
 				HS.LogMsg( lnum.."> "..line.." "..(s or "").."->"..(e or "").."="..(hash or "nil") )
-				if hash and not HS.hashIgnore[hash] then
+				if hash and not HS.hashIgnore[hash] and HS_settings.tags[hash] then
 					HS.macroTable[lnum] = HS.MakeUseLine( hash )
 				end
-				local macroText = table.concat( HS.macroTable, "\n" )
-				if strlen( macroText ) <= 255 then
-					HS.LogMsg( "Edit macro", HS_settings.debug )
-					EditMacro( macroIndex, nil, nil, macroText)
-				else
-					HS.LogMsg( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )
-				end
+			end
+			local macroText = table.concat( HS.macroTable, "\n" )
+			if strlen( macroText ) <= 255 then
+				HS.LogMsg( "Edit macro", HS_settings.debug )
+				EditMacro( macroIndex, nil, nil, macroText)
+			else
+				HS.LogMsg( string.format( HS.L["ERROR"].." ("..name.."-"..(hash or "").."): "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )
 			end
 		end
 	end
+	HS.suspendUpdateEvent = nil
 end
 function HS.GetItemFromList( list )
 	if list then
