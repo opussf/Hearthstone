@@ -144,7 +144,7 @@ function HS.UpdateMacros()
 			for lnum, line in ipairs( HS.macroTable ) do
 				HS.LogMsg( lnm.."> "..line )
 				s, e, hash = line:strfind( "(#%S+)$" )
-				if hash then
+				if hash and not HS.hashIgnore[hash] then
 					HS.macroTable[lnum] = HS.MakeUseLine( hash )
 				end
 				local macroText = table.concat( HS.macroTable, "\n" )
