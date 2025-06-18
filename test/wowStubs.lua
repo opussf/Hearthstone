@@ -1879,6 +1879,10 @@ myMacros = {
 		table.sort( myMacros.personal, function( l, r ) return( l.name < r.name ); end )
 	end,
 }
+function GetNumMacros()
+	-- return number of global, number of personal
+	return #myMacros.general, #myMacros.personal
+end
 function GetMacroInfo( macroName )
 	-- returns:  macroName, macroIcon, macroText
 	if macroName then

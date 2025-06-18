@@ -25,6 +25,11 @@ HS_settings = {
 HS.modOrder = {
 	"shiftctrlalt", "shiftctrl", "shiftalt", "shift", "ctrlalt", "ctrl", "alt"
 }
+HS.hashIgnore = {
+	["#show"] = true,
+	["#showtooltip"] = true,
+	["#showtooltips"] = true,
+}
 
 function HS.Print( msg, showName )
 	-- print to the chat frame
@@ -61,12 +66,13 @@ function HS.OnLoad()
 	HSFrame:RegisterEvent( "PLAYER_STARTED_MOVING" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_DISABLED" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_ENABLED" )
+	HSFrame:RegisterEvent( "UPDATE_MACROS" )
 
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
-	HSFrame:RegisterEvent( "TOYS_UPDATED" )
+	-- HSFrame:RegisterEvent( "TOYS_UPDATED" )
 end
 function HS.PLAYER_LOGIN( )
-	if not HS_settings.tags then
+	if not HS_settings.tags then  -- version 2 has a different structure
 		HS_settings.tags = {}
 		HS_settings.tags["#hs"] = {}
 		HS_settings.tags["#hs"].normal = HS_settings.normal
@@ -76,10 +82,10 @@ function HS.PLAYER_LOGIN( )
 		HS_settings.tags["#hs"].macroname = { HS_settings.macroname }
 	end
 end
-function HS.TOYS_UPDATED()
-	HS.lastToysUpdated = time()
-	HS.LogMsg( "TOYS_UPDATED - "..HS.lastToysUpdated, HS_settings.debug )
-end
+-- function HS.TOYS_UPDATED()
+-- 	HS.lastToysUpdated = time()
+-- 	HS.LogMsg( "TOYS_UPDATED - "..HS.lastToysUpdated, HS_settings.debug )
+-- end
 function HS.PLAYER_REGEN_DISABLED()
 	-- combat start
 	HS.inCombat = true
@@ -88,79 +94,68 @@ function HS.PLAYER_REGEN_ENABLED()
 	-- combat end
 	HS.inCombat = nil
 	if HS.combatUpdate then
-		HS.UpdateMacro()
+		HS.UpdateMacros()
 		HS.combatUpdate = nil
 	end
 end
 function HS.LOADING_SCREEN_DISABLED()
 	HS.LogMsg( "LOADING_SCREEN_DISABLED", HS_settings.debug )
 	HS.PruneLog()
-	HS.shouldUpdateMacro = true
+	HS.shouldUpdateMacros = true
 end
 function HS.PLAYER_STARTED_MOVING()
-	if HS.shouldUpdateMacro then
-		HS.LogMsg( "PLAYER_STARTED_MOVING and shouldUpdateMacro", HS_settings.debug )
-		HS.shouldUpdateMacro = nil
-		HS.UpdateMacro()
+	if HS.shouldUpdateMacros then
+		HS.LogMsg( "PLAYER_STARTED_MOVING and shouldUpdateMacros", HS_settings.debug )
+		HS.shouldUpdateMacros = nil
+		HS.UpdateMacros()
 	end
 end
-function HS.UpdateMacro()
+function HS.UPDATE_MACROS()
+	HS.LogMsg( "UPDATE_MACROS", true )
+end
+function HS.MakeUseLine( hash )
+	local hsLine = "/use "
+	for _, modKey in ipairs( HS.modOrder ) do
+		if HS_settings[hash][modKey] then
+			HS.LogMsg( "List: "..modKey, HS_settings.debug )
+			hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[hash][modKey])..";"
+		end
+	end
+	hsLine = hsLine..(HS.GetItemFromList(HS_settings[hash].normal) or "")..hash
+	return hsLine
+end
+function HS.UpdateMacros()
 	if HS.inCombat then
 		HS.combatUpdate = true
 		return
 	end
-	-- Updates / Creates macro
+	-- Update Macros
 	HS.LogMsg( "Update Macro", HS_settings.debug )
-	if not HS_settings.macroname then
-		HS.Print( string.format( HS.L["Please set macro name to update."] ) )
-		return
-	end
-	local macroName, _, macroText = GetMacroInfo( HS_settings.macroname )
 
-	-- build a table from the macro text to be able to update
-	macroTable = {}
-	if macroName then
-		HS.ListToTable( macroText, macroTable )
-	else
-		macroTable = {"#showtooltip","#HS"}  -- simple macro to create if no macro by name given.
-	end
-	local hsText = "#HS"
-	-- look for #HS and replace the following line
-	for lnum, line in ipairs( macroTable ) do
-		HS.LogMsg( lnum.."> "..line )
-		s, e, hsT = strfind( line, "(#[Hh][Ss])")
-		if s then
-			hsLineNum = lnum
-			hsText = hsT
-		end
-	end
-	-- Use modOrder to create a /use line, and replace / insert into the macroTable
-	if hsLineNum then
-		hsLine = "/use "
-		for _, modKey in ipairs( HS.modOrder ) do
-			if HS_settings[modKey] then
-				HS.LogMsg( "List: "..modKey, HS_settings.debug )
-				hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[modKey])..";"
+	-- loop through all macros
+	HS.macroTable = {}
+	local numGlobal, numCharacter = GetNumMacros()
+	HS.LogMsg( "Global: 1-"..numGlobal, true )
+	for macroIndex = 1, 120+numCharacter do
+		local name, _, body = GetMacroInfo( macroIndex )
+		if name then
+			HS.LogMsg( macroIndex..":"..(name or "?")..":"..(body or "nil") )
+			HS.ListToTable( body, HS.macroTable )
+			for lnum, line in ipairs( HS.macroTable ) do
+				HS.LogMsg( lnm.."> "..line )
+				s, e, hash = line:strfind( "(#%S+)$" )
+				if hash then
+					HS.macroTable[lnum] = HS.MakeUseLine( hash )
+				end
+				local macroText = table.concat( HS.macroTable, "\n" )
+				if strlen( macroText ) <= 255 then
+					HS.LogMsg( "Edit macro", HS_settings.debug )
+					EditMacro( macroIndex, nil, nil, macroText)
+				else
+					HS.LogMsg( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )
+				end
 			end
 		end
-		hsLine = hsLine..(HS.GetItemFromList(HS_settings.normal) or "")..hsText
-		macroTable[hsLineNum] = hsLine
-		HS_settings.macro = macroTable
-	else
-		HS.Print( string.format( HS.L["WARNING"]..": "..HS.L["There is no #HS in the %s macro."], HS_settings.macroname ) )
-	end
-	-- Edit or create the macro
-	macroText = table.concat( macroTable, "\n" )
-	if strlen(macroText) <= 255 then
-		if macroName then
-			HS.LogMsg( "Edit macro", HS_settings.debug )
-			EditMacro( GetMacroIndexByName( HS_settings.macroname ), nil, nil, macroText )
-		else
-			HS.LogMsg( "Create macro", HS_settings.debug )
-			CreateMacro( HS_settings.macroname, "INV_MISC_QUESTIONMARK", macroText )
-		end
-	else
-		HS.LogMsg( string.format( HS.L["ERROR"]..": "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )
 	end
 end
 function HS.GetItemFromList( list )
@@ -205,22 +200,6 @@ function HS.ListToTable( list, t )
 	end
 	return t
 end
-function HS.SetMacroName( nameIn )
-	if nameIn == "" then
-		HS.LogMsg( string.format( HS.L["HearthStone macro name is currently: %s"], ( HS_settings.macroname or HS.L["<is not set>"] ) ), true )
-	else
-		HS_settings.macroname = nameIn
-		HS.Print( string.format( HS.L["Set macro name to: %s"], HS_settings.macroname ) )
-		-- Update / Create Macro
-		local macroName, _, macroText = GetMacroInfo( HS_settings.macroname )
-		if macroName then
-			HS.Print( string.format( HS.L["Updating macro %s"], macroName ) )
-		else
-			HS.Print( string.format( HS.L["Creating macro %s"], HS_settings.macroname ) )
-		end
-		HS.UpdateMacro()
-	end
-end
 function HS.Add( inParams )
 	-- takes optional mod string, link, to add or list
 	-- defaults to 'normal' for mod string
@@ -253,7 +232,7 @@ function HS.Add( inParams )
 		else
 			HS_settings[modIn] = {itemID}
 		end
-		HS.UpdateMacro()
+		HS.UpdateMacros()
 	end
 
 	-- Print for given mod
@@ -305,7 +284,7 @@ function HS.Remove( inParams )
 		if #HS_settings[modIn] == 0 then
 			HS_settings[modIn] = nil
 		end
-		HS.UpdateMacro()
+		HS.UpdateMacros()
 	end
 	-- Print for given mod
 	if HS_settings[modIn] then
@@ -380,12 +359,8 @@ HS.commandList = {
 		["func"] = HS.PrintHelp,
 		["help"] = {"", HS.L["Print this help."]}
 	},
-	[HS.L["name"]] = {
-		["func"] = HS.SetMacroName,
-		["help"] = {HS.L["<name>"], HS.L["Set the macro name to use."]}
-	},
 	[HS.L["update"]] = {
-		["func"] = HS.UpdateMacro,
+		["func"] = HS.UpdateMacros,
 		["help"] = {"", HS.L["Update macro."]}
 	},
 	[HS.L["add"]] = {
