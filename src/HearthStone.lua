@@ -79,7 +79,6 @@ function HS.PLAYER_LOGIN( )
 		for _, mod in pairs( HS.modOrder ) do
 			HS_settings.tags["#hs"][mod] = HS_settings[mod]
 		end
-		-- HS_settings.tags["#hs"].macroname = { HS_settings.macroname }
 	end
 end
 -- function HS.TOYS_UPDATED()
@@ -133,6 +132,7 @@ function HS.UpdateMacros()
 	HS.LogMsg( "Update Macro", HS_settings.debug )
 
 	-- loop through all macros
+	-- look for #hash comments at the end of the line.
 	HS.macroTable = {}
 	local numGlobal, numCharacter = GetNumMacros()
 	HS.LogMsg( "Global: 1-"..numGlobal, true )
