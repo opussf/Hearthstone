@@ -16,11 +16,8 @@ COLOR_END = "|r"
 
 -- saved log file
 HS_log = {}
-HS_settings = {}
-
 HS_settings = {
 	["normal"] = {"6948"},  -- default to get you going.   Can remove
-	["tags"] = {},
 }
 HS.modOrder = {
 	"shiftctrlalt", "shiftctrl", "shiftalt", "shift", "ctrlalt", "ctrl", "alt"
@@ -117,7 +114,7 @@ function HS.MakeUseLine( hash )
 	for _, modKey in ipairs( HS.modOrder ) do
 		if HS_settings.tags[hash][modKey] then
 			HS.LogMsg( "List: "..modKey, HS_settings.debug )
-			hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings[hash][modKey])..";"
+			hsLine = hsLine.."[mod:"..modKey.."]"..HS.GetItemFromList(HS_settings.tags[hash][modKey])..";"
 		end
 	end
 	hsLine = hsLine..(HS.GetItemFromList(HS_settings.tags[hash].normal) or "")..hash

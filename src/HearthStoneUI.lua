@@ -21,7 +21,7 @@ function HS.TagDropDownInitialize( self, level, menuList )
 		UIDropDownMenu_AddButton( info, level )
 	end
 end
-function HS.UIDropDownOnLoad( self )
+function HS.TagDropDownOnLoad( self )
 	print( self )
 	for k,v in pairs(self) do
 		print(k,v)

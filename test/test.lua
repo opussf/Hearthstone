@@ -84,6 +84,14 @@ function test.test_update_showtooltip()
 	HS.Command( "update" )
 	assertEquals( "#showtooltip\n/use item:165670#hs", myMacros.general[1].text )
 end
+function test.test_update_complex()
+	HS_settings.tags["#hs"].normal[1] = "5567"
+	HS_settings.tags["#hs"]["alt"] = { "1234" }
+	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
+	test.dump(HS_settings)
+	HS.Command( "update" )
+	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
+end
 function test.test_long_macro_old_method_does_not_destroy()
 	myMacros.general = { { ["name"] = "testmacro", ["icon"] = "",
 		["text"] = "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:1234#hs\n0123456789012345678901234567890\n2345"
