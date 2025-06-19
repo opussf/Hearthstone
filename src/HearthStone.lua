@@ -77,7 +77,7 @@ function HS.PLAYER_LOGIN( )
 			HS_settings.tags["#hs"][mod] = HS_settings[mod]
 		end
 	end
-	HS.UIPopulate()
+	HS.UIInit()
 end
 -- function HS.TOYS_UPDATED()
 -- 	HS.lastToysUpdated = time()

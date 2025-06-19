@@ -4,6 +4,22 @@ HS.commandList["config"] = {
 	["help"] = {"", "Config"}
 }
 
+function HS.UIInit()
+	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+	HS.ModifierDropDownBuild( HSConfig_ModifierDropDownMenu )
+end
+
+
+
+function HS.TagDropDownBuild( self )
+	print( "TagDropDownOnShow" )
+	print( self )
+	for k,v in pairs(self) do
+		print(k,v)
+	end
+	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
+	UIDropDownMenu_JustifyText( self, "LEFT" )
+end
 function HS.TagDropDownPopulate( self, level, menuList )
 	print( self, level, menuList )
 	local tagList = {}
@@ -21,14 +37,6 @@ function HS.TagDropDownPopulate( self, level, menuList )
 		UIDropDownMenu_AddButton( info, level )
 	end
 end
-function HS.TagDropDownBuild( self )
-	print( "TagDropDownOnShow" )
-	print( self )
-	for k,v in pairs(self) do
-		print(k,v)
-	end
-	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
-end
 function HS.SetTagForEdit( info )
 	-- takes the info table
 	print( "SetTagForEdit" )
@@ -38,15 +46,18 @@ function HS.SetTagForEdit( info )
 	end
 	print( "SetTagForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
+	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
 
 end
 
-
-
+function HS.ModifierDropDownBuild( self )
+	UIDropDownMenu_Initialize( self, HS.ModifierDropDownInit )
+	UIDropDownMenu_JustifyText( self, "LEFT" )
+end
 function HS.ModifierDropDownInit( self, level, menuList )
 	local modList = { "normal" }
 	for _, mod in ipairs( HS.modOrder ) do
-		modList:append( mod )
+		table.insert( modList, mod )
 	end
 	for _, mod in ipairs( modList ) do
 		info = UIDropDownMenu_CreateInfo()
@@ -56,9 +67,6 @@ function HS.ModifierDropDownInit( self, level, menuList )
 		UIDropDownMenu_AddButton( info, level )
 	end
 end
-function HS.ModifierDropDownOnLoad( self )
-	UIDropDownMenu_Initialize( self, HS.ModifierDropDownInit )
-end
 function HS.SetModForEdit( info )
 	print( "SetModForEdit" )
 	print( info )
@@ -67,11 +75,10 @@ function HS.SetModForEdit( info )
 	end
 	print( "SetModForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
+	UIDropDownMenu_SetText( HSConfig_ModifierDropDownMenu, info.value )
 end
 
-function HS.UIPopulate()
-	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
-end
+
 
 
 -- UIDropDownMenu_SetText( RestedUIFrame.DropDownMenu, Rested.reportName )

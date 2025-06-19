@@ -661,6 +661,8 @@ function CreateButton( name, ... )
 end
 function UIDropDownMenu_Initialize( self )
 end
+function UIDropDownMenu_JustifyText( self, justify )
+end
 function ChatFrame_AddMessageEventFilter()
 end
 

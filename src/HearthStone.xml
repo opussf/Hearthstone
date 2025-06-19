@@ -112,7 +112,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>HS.ModifierDropDownOnLoad(self)</OnLoad>
+					<!-- <OnLoad>HS.ModifierDropDownOnLoad(self)</OnLoad> -->
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
