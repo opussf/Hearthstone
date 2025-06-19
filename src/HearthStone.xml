@@ -58,8 +58,8 @@
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
-			<Button name="$parent_DelTagButton" parentKey="DelTagButton" inherits="UIPanelButtonTemplate" text="Delete">
-				<Size x="76" y="16" />
+			<Button name="$parent_DelTagButton" parentKey="DelTagButton" inherits="UIPanelButtonTemplate">
+				<Size x="76" y="30" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent">
 						<Offset>
@@ -67,9 +67,12 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Delete"])</OnLoad>
+				</Scripts>
 			</Button>
-			<Button name="$parent_EditTagButton" parentKey="EditTagButton" inherits="UIPanelButtonTemplate" text="Rename">
-				<Size x="76" y="16" />
+			<Button name="$parent_EditTagButton" parentKey="EditTagButton" inherits="UIPanelButtonTemplate">
+				<Size x="76" y="30" />
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_DelTagButton">
 						<Offset>
@@ -77,6 +80,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Rename"])</OnLoad>
+				</Scripts>
 			</Button>
 			<EditBox name="$parent_TagEditBox" parentKey="TagEditBox" inherits="InputBoxTemplate">
 				<Size x="150" y="30" />
@@ -92,8 +98,8 @@
 					<!-- <OnTextChanged>Rested.updateFilter()</OnTextChanged> -->
 				</Scripts>
 			</EditBox>
-			<Button name="$parent_AddTagButton" parentKey="AddTagButton" inherits="UIPanelButtonTemplate" text="Add">
-				<Size x="76" y="16" />
+			<Button name="$parent_AddTagButton" parentKey="AddTagButton" inherits="UIPanelButtonTemplate">
+				<Size x="76" y="30" />
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_TagEditBox">
 						<Offset>
@@ -101,6 +107,9 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Add"])</OnLoad>
+				</Scripts>
 			</Button>
 			<Frame name="$parent_ModifierDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="ModifierDropDownMenu">
 				<Size x="50" y="16" />

@@ -46,8 +46,9 @@ function HS.SetTagForEdit( info )
 	end
 	print( "SetTagForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
+	HS.EditTag = info.value
 	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
-
+	HSConfig_TagEditBox:SetText( info.value )
 end
 
 function HS.ModifierDropDownBuild( self )
