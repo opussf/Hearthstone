@@ -4,7 +4,7 @@ HS.commandList["config"] = {
 	["help"] = {"", "Config"}
 }
 
-function HS.TagDropDownInitialize( self, level, menuList )
+function HS.TagDropDownPopulate( self, level, menuList )
 	print( self, level, menuList )
 	local tagList = {}
 
@@ -16,20 +16,61 @@ function HS.TagDropDownInitialize( self, level, menuList )
 		info = UIDropDownMenu_CreateInfo()
 		info.text = tag
 		info.notCheckable = true
-		info.arg1 = tag
+		-- info.arg1 = tag
 		info.func = HS.SetTagForEdit
 		UIDropDownMenu_AddButton( info, level )
 	end
 end
-function HS.TagDropDownOnLoad( self )
+function HS.TagDropDownBuild( self )
+	print( "TagDropDownOnShow" )
 	print( self )
 	for k,v in pairs(self) do
 		print(k,v)
 	end
-	UIDropDownMenu_Initialize( self, HS.TagDropDownInitialize )
+	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
 end
-function HS.SetTagForEdit( hash )
-	print( "SetTagForEdit( "..hash.." )" )
+function HS.SetTagForEdit( info )
+	-- takes the info table
+	print( "SetTagForEdit" )
+	print( info )
+	for k,v in pairs( info ) do
+		print(k,v)
+	end
+	print( "SetTagForEdit( "..info.value.." )" )
+	-- UIDropDownMenu_SetText( )
+
+end
+
+
+
+function HS.ModifierDropDownInit( self, level, menuList )
+	local modList = { "normal" }
+	for _, mod in ipairs( HS.modOrder ) do
+		modList:append( mod )
+	end
+	for _, mod in ipairs( modList ) do
+		info = UIDropDownMenu_CreateInfo()
+		info.text = mod
+		info.notCheckable = true
+		info.func = HS.SetModForEdit
+		UIDropDownMenu_AddButton( info, level )
+	end
+end
+function HS.ModifierDropDownOnLoad( self )
+	UIDropDownMenu_Initialize( self, HS.ModifierDropDownInit )
+end
+function HS.SetModForEdit( info )
+	print( "SetModForEdit" )
+	print( info )
+	for k,v in pairs( info ) do
+		print(k,v)
+	end
+	print( "SetModForEdit( "..info.value.." )" )
+	-- UIDropDownMenu_SetText( )
+end
+
+function HS.UIPopulate()
+	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 end
 
 

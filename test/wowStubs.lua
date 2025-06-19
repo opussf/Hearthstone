@@ -659,7 +659,8 @@ function CreateButton( name, ... )
 	me.name = name
 	return me
 end
-
+function UIDropDownMenu_Initialize( self )
+end
 function ChatFrame_AddMessageEventFilter()
 end
 

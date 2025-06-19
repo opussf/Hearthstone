@@ -54,7 +54,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<!-- <OnLoad>HS.UIDropDownOnLoad(self)</OnLoad> -->
+					<!-- <OnShow>HS.TagDropDownOnShow(self)</OnShow> -->
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
@@ -112,6 +112,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
+					<OnLoad>HS.ModifierDropDownOnLoad(self)</OnLoad>
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
