@@ -46,7 +46,7 @@ function HS.SetTagForEdit( info )
 	end
 	print( "SetTagForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
-	HS.EditTag = info.value
+	HS.editTag = info.value
 	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
 	HSConfig_TagEditBox:SetText( info.value )
 end
@@ -78,7 +78,25 @@ function HS.SetModForEdit( info )
 	-- UIDropDownMenu_SetText( )
 	UIDropDownMenu_SetText( HSConfig_ModifierDropDownMenu, info.value )
 end
+-------
+function HS.TagButtonOnClick( self, action )
+	print( "TagButtonOnClick( ", self, ", ", action, " )" )
+	if action == "add" then
+		local newTag = HSConfig_TagEditBox:GetText()
+		if string.len( newTag ) > 0 then
+			if string.sub( newTag, 1, 1 ) ~= "#" then
+				newTag = "#"..newTag
+			end
+			if not HS_settings.tags[newTag] then
+				print( "add: ", newTag )
+				HS_settings.tags[newTag] = {}
+				HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+			end
+		end
+	end
+	print( HS.editTag )
 
+end
 
 
 
