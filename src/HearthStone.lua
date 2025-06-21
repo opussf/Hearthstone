@@ -77,7 +77,25 @@ function HS.PLAYER_LOGIN( )
 			HS_settings.tags["#hs"][mod] = HS_settings[mod]
 		end
 	end
+	HSFrame:RegisterEvent( "GET_ITEM_INFO_RECEIVED" )
+	for tag, mods in pairs( HS_settings.tags ) do
+		for mod, items in pairs( mods ) do
+			for i in pairs( items ) do
+				name = GetItemInfo( i )
+				if not name then
+					HS.toCache = HS.toCache or {}
+					HS.toCache[i] = true
+				end
+			end
+		end
+	end
 	HS.UIInit()
+end
+function HS.GET_ITEM_INFO_RECEIVED( _, itemID, success )
+	if HS.toCache[itemID] then
+		HS.toCache[itemID] = nil
+	end
+
 end
 -- function HS.TOYS_UPDATED()
 -- 	HS.lastToysUpdated = time()
@@ -110,6 +128,7 @@ end
 function HS.UPDATE_MACROS()
 	if HS.suspendUpdateEvent then return; end
 	HS.LogMsg( "UPDATE_MACROS", true )
+	HS.UpdateMacros()
 end
 function HS.MakeUseLine( hash )
 	if HS_settings.tags[hash] then
@@ -336,7 +355,7 @@ function HS.Command( msg )
 	if cmdFunc and cmdFunc.func then
 		cmdFunc.func(param)
 	else
-		HS.PrintHelp()
+		HSConfig:Show()
 	end
 end
 function HS.PrintHelp()

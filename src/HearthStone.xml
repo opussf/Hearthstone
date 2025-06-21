@@ -75,9 +75,7 @@
 		<Frames>
 			<Button name="$parent_Close" inherits="UIPanelCloseButton" parent="HSConfig">
 				<Anchors>
-					<Anchor point="TOPRIGHT">
-						<Offset x="0" y="0"/>
-					</Anchor>
+					<Anchor point="TOPRIGHT" x="0" y="0"/>
 				</Anchors>
 				<Scripts>
 					<OnClick>self:GetParent():Hide(); HS.UpdateMacros()</OnClick>
