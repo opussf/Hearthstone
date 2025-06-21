@@ -149,7 +149,7 @@
 				</Scripts>
 			</Frame>
 			<Frame name="$parent_ToyList" parentKey="ToyList">
-				<Size x="500" y="320"/>
+				<Size x="500" y="328"/>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent">
 						<Offset>
@@ -164,12 +164,33 @@
 						</Texture>
 					</Layer>
 				</Layers>
-
 			</Frame>
+			<Slider name="$parent_ToyListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
+				<Size x="12" y="324"/>
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_ToyList"/>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color r="0" g="0" b="0" a="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>self:SetValue(0)</OnLoad>
+					<OnValueChanged>HS.UpdateUI()</OnValueChanged>
+				</Scripts>
+				<ThumbTexture name="$parentThumbTexture"
+						file="Interface\Buttons\UI-ScrollBar-Knob">
+					<Size x="12" y="25"/>
+				</ThumbTexture>
+			</Slider>
 
 		</Frames>
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
+			<OnMouseWheel>HS.UIMouseWheel( delta )</OnMouseWheel>
 		</Scripts>
 	</Frame>
 </Ui>

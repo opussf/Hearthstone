@@ -12,16 +12,10 @@ function HS.UIInit()
 end
 
 function HS.TagDropDownBuild( self )
-	print( "TagDropDownOnShow" )
-	print( self )
-	for k,v in pairs(self) do
-		print(k,v)
-	end
 	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
 	UIDropDownMenu_JustifyText( self, "LEFT" )
 end
 function HS.TagDropDownPopulate( self, level, menuList )
-	print( self, level, menuList )
 	local tagList = {}
 
 	for hash in pairs( HS_settings.tags ) do
@@ -36,19 +30,17 @@ function HS.TagDropDownPopulate( self, level, menuList )
 		info.func = HS.SetTagForEdit
 		UIDropDownMenu_AddButton( info, level )
 	end
+	UIDropDownMenu_SetText( self, tagList[1] )
+	HS.editTag = tagList[1]
 end
 function HS.SetTagForEdit( info )
 	-- takes the info table
-	print( "SetTagForEdit" )
-	print( info )
-	for k,v in pairs( info ) do
-		print(k,v)
-	end
 	print( "SetTagForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
 	HS.editTag = info.value
 	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
 	HSConfig_TagEditBox:SetText( info.value )
+	HS.UpdateUI()
 end
 
 function HS.ModifierDropDownBuild( self )
@@ -67,16 +59,13 @@ function HS.ModifierDropDownInit( self, level, menuList )
 		info.func = HS.SetModForEdit
 		UIDropDownMenu_AddButton( info, level )
 	end
+	UIDropDownMenu_SetText( self, "normal" )
 end
 function HS.SetModForEdit( info )
-	print( "SetModForEdit" )
-	print( info )
-	for k,v in pairs( info ) do
-		print(k,v)
-	end
 	print( "SetModForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
 	UIDropDownMenu_SetText( HSConfig_ModifierDropDownMenu, info.value )
+	HS.UpdateUI()
 end
 -------
 function HS.TagButtonOnClick( self, action )
@@ -126,7 +115,7 @@ function HS.BuildBars()
 	if not HS.bars then
 		HS.bars = {}
 	end
-	showNumBars = 3
+	showNumBars = 9
 	local count = #HS.bars
 	for idx = count+1, showNumBars do
 		HS.bars[idx] = {}
@@ -137,21 +126,50 @@ function HS.BuildBars()
 		else
 			item:SetPoint( "TOPLEFT", HS.bars[idx-1].bar, "BOTTOMLEFT", 0, 0 )
 		end
-		local children = {item:GetChildren()}
-		for i, child in ipairs(children) do
-			print( i, child:GetName(), child:GetObjectType(), child:GetDebugName() )
-		end
+
 		local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(110560)
 		-- print( item:GetName() )
 		name = name or "Place holder"
 		_G[item:GetName().."ToyName"]:SetText( name )
 		_G[item:GetName().."Icon"]:SetTexture( icon )
-
-		-- item.ToyName:SetText( name )
-		-- item.Icon:SetTexture( icon )
 		item:Show()
 	end
-
+end
+--------
+function HS.UpdateUI()
+	if HSConfig:IsVisible() and HS_settings.tags then
+		local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
+		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
+		local count = ( HS_settings.tags[tag][mod] and #HS_settings.tags[tag][mod] or 0 )
+		HSConfig_ToyListVSlider:SetMinMaxValues( 0, max( 0, count-9 ) )
+		print( "count:"..count )
+		if count > 0 then
+			local offset = math.floor( HSConfig_ToyListVSlider:GetValue() )
+			print( "offset:"..offset )
+			local name, icon, barName
+			for i = 1, 9 do
+				local idx = i + offset
+				if idx <= count then
+					name, _, _, _, _, _, _, _, _, icon = GetItemInfo(HS_settings.tags[tag][mod][idx])
+					barName = HS.bars[i].bar:GetName()
+					_G[barName.."ToyName"]:SetText( name )
+					_G[barName.."Icon"]:SetTexture( icon )
+					HS.bars[i].bar:Show()
+				else
+					HS.bars[i].bar:Hide()
+				end
+			end
+		elseif( HS.bars and count == 0 ) then
+			for i = 1, 9 do
+				HS.bars[i].bar:Hide()
+			end
+		end
+	end
+end
+function HS.UIMouseWheel( delta )
+	HSConfig_ToyListVSlider:SetValue(
+		HSConfig_ToyListVSlider:GetValue() - delta
+	)
 end
 
 
