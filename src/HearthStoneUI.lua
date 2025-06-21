@@ -136,21 +136,25 @@ function HS.UpdateUI()
 		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
 		local count = ( HS_settings.tags[tag][mod] and #HS_settings.tags[tag][mod] or 0 )
 		HSConfig_ToyListVSlider:SetMinMaxValues( 0, max( 0, count-9 ) )
-		print( "count:"..count )
 		if count > 0 then
 			local offset = math.floor( HSConfig_ToyListVSlider:GetValue() )
-			print( "offset:"..offset )
 			local name, icon, barName
 			for i = 1, 9 do
 				local idx = i + offset
 				if idx <= count then
 					name, _, _, _, _, _, _, _, _, icon = GetItemInfo(HS_settings.tags[tag][mod][idx])
-					barName = HS.bars[i].bar:GetName()
-					_G[barName.."ToyName"]:SetText( name )
-					_G[barName.."Icon"]:SetTexture( icon )
-					HS.bars[i].bar.itemID = HS_settings.tags[tag][mod][idx]
-					HS.bars[i].bar.itemIdx = idx
-					HS.bars[i].bar:Show()
+					if name then
+						barName = HS.bars[i].bar:GetName()
+						_G[barName.."ToyName"]:SetText( name )
+						_G[barName.."Icon"]:SetTexture( icon )
+						HS.bars[i].bar.itemID = HS_settings.tags[tag][mod][idx]
+						HS.bars[i].bar.itemIdx = idx
+						HS.bars[i].bar:Show()
+					else
+						print( "name:", name, icon )
+						HS.toCache = HS.toCache or {}
+						HS.toCache[tonumber(HS_settings.tags[tag][mod][idx])] = true
+					end
 				else
 					HS.bars[i].bar:Hide()
 				end
@@ -200,77 +204,3 @@ function HS.DelToyButtonOnClick( self )
 	end
 	HS.UpdateUI()
 end
-
-
--- UIDropDownMenu_SetText( RestedUIFrame.DropDownMenu, Rested.reportName )
-
--- function HS.MakeTabActive( self )
--- 	local tabsParent = self:GetParent()
--- 	local tabs = {tabsParent:GetChildren()}
--- 	for _, tab in pairs(tabs) do
--- 		local parentKey = tab:GetParentKey()
--- 		if self ~= tab and (parentKey == "tab1" or parentKey == "tab2" or parentKey == "tab3" ) then
--- 			tab:SetSelected(false)
--- 			tab.contents:Hide()
--- 			tab:Enable()
--- 		end
--- 	end
--- 	if self:IsSelected() then
--- 		self.contents:Show()
--- 		self:Disable()
--- 	else
--- 		self.contents:Hide()
--- 	end
--- end
-
--- function HS.TagsEditFocusLost(self)
--- 	local thing = {}
--- 	HS.ListToTable( self:GetText(), thing )
--- 	local oldTags = HS_settings.tags or {}
--- 	HS_settings.tags = {}
--- 	for i,tag in ipairs( thing ) do
--- 		if string.sub(tag,1,1) ~= "#" then -- if it does NOT start with #, add it
--- 			tag = "#"..tag
--- 		end
--- 		HS_settings.tags[tag] = oldTags[tag] or {}
--- 	end
--- end
--- function HS.TagsToEdit(self)
--- 	local tags = {}
--- 	for t in pairs( HS_settings.tags ) do table.insert( tags, t ) end
--- 	table.sort( tags )
--- 	self:SetText( table.concat( tags, "\n" ) )
--- end
-
--- function Rested.UIDropDownOnClick( self, cmd )
--- 	--print( "Rested.UIDropDownOnClick( "..cmd.." )" )
--- 	Rested.commandList[cmd].func()
--- end
--- function Rested.UIDropDownInitialize( self, level, menuList )
--- 	-- This is called when the drop down is initialized, when it needs to build the choice box
--- 	-- level and menuList are ignored here
--- 	-- based on Rested.dropDownMenuTable["Full"] = "full"
--- 	-- the Key is what to show, the value is what rested command to call
--- 	-- using Rested.commandList["full"] = {["func"] = function() end }
--- 	--local info = UIDropDownMenu_CreateInfo()
--- 	local sortedKeys, i = {}, 1
--- 	for text, _ in pairs( Rested.dropDownMenuTable ) do
--- 		sortedKeys[i] = text
--- 		i = i + 1
--- 	end
--- 	table.sort( sortedKeys, function( a, b ) return string.lower(a) < string.lower(b) end )
--- 	for _, text in ipairs( sortedKeys ) do
--- 		cmd = Rested.dropDownMenuTable[text]
--- 		info = UIDropDownMenu_CreateInfo()
--- 		info.text = text
--- 		info.notCheckable = true
--- 		info.arg1 = cmd
--- 		info.func = Rested.UIDropDownOnClick
-
--- 		UIDropDownMenu_AddButton( info, level )
--- 	end
--- end
--- function Rested.UIDropDownOnLoad( self )
--- 	UIDropDownMenu_Initialize( RestedUIFrame.DropDownMenu, Rested.UIDropDownInitialize ) -- displayMode, level, menuList
--- 	UIDropDownMenu_JustifyText( RestedUIFrame.DropDownMenu, "LEFT" )
--- end

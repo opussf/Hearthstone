@@ -64,6 +64,7 @@ function HS.OnLoad()
 	HSFrame:RegisterEvent( "PLAYER_REGEN_DISABLED" )
 	HSFrame:RegisterEvent( "PLAYER_REGEN_ENABLED" )
 	HSFrame:RegisterEvent( "UPDATE_MACROS" )
+	HSFrame:RegisterEvent( "GET_ITEM_INFO_RECEIVED" )
 
 	-- HSFrame:RegisterEvent( "NEW_TOY_ADDED" )
 	-- HSFrame:RegisterEvent( "TOYS_UPDATED" )
@@ -77,25 +78,28 @@ function HS.PLAYER_LOGIN( )
 			HS_settings.tags["#hs"][mod] = HS_settings[mod]
 		end
 	end
-	HSFrame:RegisterEvent( "GET_ITEM_INFO_RECEIVED" )
-	for tag, mods in pairs( HS_settings.tags ) do
-		for mod, items in pairs( mods ) do
-			for i in pairs( items ) do
-				name = GetItemInfo( i )
-				if not name then
-					HS.toCache = HS.toCache or {}
-					HS.toCache[i] = true
-				end
-			end
-		end
-	end
 	HS.UIInit()
 end
 function HS.GET_ITEM_INFO_RECEIVED( _, itemID, success )
-	if HS.toCache[itemID] then
-		HS.toCache[itemID] = nil
+	print( "GET_ITEM_INFO_RECEIVED:", itemID, type(itemID), success )
+	if HS.toCache then
+		if HS.toCache[itemID] then
+			print( "Was in the cache" )
+			HS.toCache[itemID] = nil
+			HS.UpdateUI()
+		else
+			local cacheCount = 0
+			for i in pairs( HS.toCache ) do
+				cacheCount = cacheCount + 1
+				local name = GetItemInfo( i )
+				print( "re-request:", i, type(i), name )
+			end
+			print( "toCacheSize:", cacheCount )
+			if cacheCount == 0 then
+				print( "Cache is empty" )
+			end
+		end
 	end
-
 end
 -- function HS.TOYS_UPDATED()
 -- 	HS.lastToysUpdated = time()
@@ -117,6 +121,21 @@ function HS.LOADING_SCREEN_DISABLED()
 	HS.LogMsg( "LOADING_SCREEN_DISABLED", HS_settings.debug )
 	HS.PruneLog()
 	HS.shouldUpdateMacros = true
+	HSFrame:RegisterEvent( "GET_ITEM_INFO_RECEIVED" )
+	for tag, mods in pairs( HS_settings.tags ) do
+		print( "tag:"..tag )
+		for mod, items in pairs( mods ) do
+			print( "mod:"..mod )
+			for i,item in pairs( items ) do
+				name = GetItemInfo( item )
+				print( i, item, name )
+				if not name then
+					HS.toCache = HS.toCache or {}
+					HS.toCache[tonumber(item)] = true
+				end
+			end
+		end
+	end
 end
 function HS.PLAYER_STARTED_MOVING()
 	if HS.shouldUpdateMacros then
