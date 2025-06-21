@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
 	<!-- Version 2.0 -->
-	<Frame name="HSToy_template" virtual="true">
+	<Frame name="HSToy_template" enableMouse="true" virtual="true">
 		<Size x="500" y="36"/>
 		<Layers>
 			<Layer level="ARTWORK">
@@ -19,6 +19,22 @@
 				</FontString>
 			</Layer>
 		</Layers>
+		<Frames>
+			<Button name="$parentDelToyButton" inherits="UIPanelButtonTemplate">
+				<Size x="76" y="30" />
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="-10" y="-3" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Delete"])</OnLoad>
+					<OnClick>HS.DelToyButtonOnClick( self )</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
 	</Frame>
 
 	<Frame name="HSFrame"  frameStrata="BACKGROUND" toplevel="false" parent="UIParent">
@@ -191,6 +207,8 @@
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
 			<OnMouseWheel>HS.UIMouseWheel( delta )</OnMouseWheel>
+			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
+			<OnMouseUp>HS.UIOnMouseUp( self, button )</OnMouseUp>
 		</Scripts>
 	</Frame>
 </Ui>

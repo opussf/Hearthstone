@@ -154,6 +154,8 @@ function HS.UpdateUI()
 					barName = HS.bars[i].bar:GetName()
 					_G[barName.."ToyName"]:SetText( name )
 					_G[barName.."Icon"]:SetTexture( icon )
+					HS.bars[i].bar.itemID = HS_settings.tags[tag][mod][idx]
+					HS.bars[i].bar.itemIdx = idx
 					HS.bars[i].bar:Show()
 				else
 					HS.bars[i].bar:Hide()
@@ -171,7 +173,39 @@ function HS.UIMouseWheel( delta )
 		HSConfig_ToyListVSlider:GetValue() - delta
 	)
 end
+function HS.UIOnReceiveDrag( self )
+	print( "HS.UIOnReceiveDrag( ", self, " )" )
+	local type, itemID, itemLink = GetCursorInfo()
+	print( type, itemID, itemLink )
+	if type == "item" then
+		local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
+		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
+		if HS_settings.tags[tag][mod] then
+			table.insert( HS_settings.tags[tag][mod], itemID )
+		else
+			HS_settings.tags[tag][mod] = {itemID}
+		end
+	end
+	ClearCursor()
+	HS.UpdateUI()
+end
+function HS.UIOnMouseUp( self, button )
+	print( "HS.UIOnMouseUp( ", self, ", ", button, " )" )
+	local type, itemID, itemLink = GetCursorInfo()
+	print( type, itemID, itemLink )
+end
+function HS.DelToyButtonOnClick( self )
+	print( "HS.BarOnMouseDown( ", self, " )" )
+	local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
+	local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
+	local idx = self:GetParent().itemIdx
 
+	table.remove( HS_settings.tags[tag][mod], idx )
+	if #HS_settings.tags[tag][mod] == 0 then
+		HS_settings.tags[tag][mod] = nil
+	end
+	HS.UpdateUI()
+end
 
 
 -- UIDropDownMenu_SetText( RestedUIFrame.DropDownMenu, Rested.reportName )
