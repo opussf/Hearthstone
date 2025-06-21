@@ -3,13 +3,13 @@ HS.commandList["config"] = {
 	["func"] = function() HSConfig:Show() end,
 	["help"] = {"", "Config"}
 }
+HS.displayList = {}
 
 function HS.UIInit()
 	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 	HS.ModifierDropDownBuild( HSConfig_ModifierDropDownMenu )
+	HS.BuildBars()
 end
-
-
 
 function HS.TagDropDownBuild( self )
 	print( "TagDropDownOnShow" )
@@ -93,8 +93,64 @@ function HS.TagButtonOnClick( self, action )
 				HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 			end
 		end
+	elseif action == "edit" then
+		local selectedTag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
+		local newTag = HSConfig_TagEditBox:GetText()
+		if string.len( newTag ) > 0 then
+			if string.sub( newTag, 1, 1 ) ~= "#" then
+				newTag = "#"..newTag
+			end
+			if not HS_settings.tags[newTag] then
+				print( "rename: ", selectedTag, "=>", newTag )
+				HS_settings.tags[newTag] = HS_settings.tags[selectedTag]
+				HS_settings.tags[selectedTag] = nil
+				HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+				HS.editTag = newTag
+				UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
+				HSConfig_TagEditBox:SetText( info.value )
+			end
+		end
+	elseif action == "del" then
+		local selectedTag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
+		if selectedTag then
+			print( "delete:", selectedTag )
+			HS_settings.tags[selectedTag] = nil
+			HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+		end
 	end
-	print( HS.editTag )
+end
+
+---------
+function HS.BuildBars()
+	print( "HS.BuildBars" )
+	if not HS.bars then
+		HS.bars = {}
+	end
+	showNumBars = 3
+	local count = #HS.bars
+	for idx = count+1, showNumBars do
+		HS.bars[idx] = {}
+		local item = CreateFrame( "Frame", "HS_ItemBar"..idx, HSConfig_ToyList, "HSToy_template" )
+		HS.bars[idx].bar = item
+		if idx == 1 then
+			item:SetPoint( "TOPLEFT", "HSConfig_ToyList", "TOPLEFT", 5, -5 )
+		else
+			item:SetPoint( "TOPLEFT", HS.bars[idx-1].bar, "BOTTOMLEFT", 0, 0 )
+		end
+		local children = {item:GetChildren()}
+		for i, child in ipairs(children) do
+			print( i, child:GetName(), child:GetObjectType(), child:GetDebugName() )
+		end
+		local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(110560)
+		-- print( item:GetName() )
+		name = name or "Place holder"
+		_G[item:GetName().."ToyName"]:SetText( name )
+		_G[item:GetName().."Icon"]:SetTexture( icon )
+
+		-- item.ToyName:SetText( name )
+		-- item.Icon:SetTexture( icon )
+		item:Show()
+	end
 
 end
 
