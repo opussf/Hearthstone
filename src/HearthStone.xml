@@ -79,6 +79,9 @@
 						<Offset x="0" y="0"/>
 					</Anchor>
 				</Anchors>
+				<Scripts>
+					<OnClick>self:GetParent():Hide(); HS.UpdateMacros()</OnClick>
+				</Scripts>
 			</Button>
 			<Frame name="$parent_TagDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="TagDropDownMenu">
 				<Size x="50" y="16" />
@@ -164,6 +167,20 @@
 					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
 				</Scripts>
 			</Frame>
+			<Button name="$parent_ShowToyBox" inherits="UIPanelButtonTemplate">
+				<Size x="86" y="30"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="200" y="-84"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Toy Box"])</OnLoad>
+					<OnClick>ToggleCollectionsJournal(3)</OnClick>
+				</Scripts>
+			</Button>
 			<Frame name="$parent_ToyList" parentKey="ToyList">
 				<Size x="500" y="328"/>
 				<Anchors>
@@ -182,7 +199,7 @@
 				</Layers>
 			</Frame>
 			<Slider name="$parent_ToyListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
-				<Size x="12" y="324"/>
+				<Size x="12" y="328"/>
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_ToyList"/>
 				</Anchors>
@@ -202,7 +219,6 @@
 					<Size x="12" y="25"/>
 				</ThumbTexture>
 			</Slider>
-
 		</Frames>
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
