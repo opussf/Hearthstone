@@ -89,6 +89,14 @@ function test.test_update_complex()
 	HS.Command( "update" )
 	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
 end
+function test.test_update_complex_withMultiple()
+	HS_settings.tags["#hs"].normal[1] = "5567"
+	HS_settings.tags["#hs"]["alt"] = { "1234","7777" }
+	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
+	HS.Command( "update" )
+	assertTrue( myMacros.general[1].text == "/use [mod:alt]item:1234;item:5567#hs"
+			or myMacros.general[1].text == "/use [mod:alt]item:7777;item:5567#hs" )
+end
 function test.test_update_seeds()
 	-- this macro caused some problems
 	HS_settings.tags["#hs"].normal[1] = "5567"

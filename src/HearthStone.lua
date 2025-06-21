@@ -180,9 +180,10 @@ function HS.GetItemFromList( list )
 				else
 					HS.LogMsg( "PlayerHasToy: "..(PlayerHasToy(list[r]) and "true" or "false" ), HS_settings.debug)
 					HS.LogMsg( "IsToyUsable : "..(C_ToyBox.IsToyUsable(list[r]) and "true" or "false"), HS_settings.debug)
-					if not PlayerHasToy(list[r]) or not C_ToyBox.IsToyUsable(list[r]) then
-						r = nil
-					end
+					-- @TODO: Determine when to not select an item in a list
+					-- if not PlayerHasToy(list[r]) or not C_ToyBox.IsToyUsable(list[r]) then
+						-- r = nil
+					-- end
 				end
 			end
 			if r then

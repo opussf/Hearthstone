@@ -111,7 +111,7 @@ end
 
 ---------
 function HS.BuildBars()
-	print( "HS.BuildBars" )
+	-- print( "HS.BuildBars" )
 	if not HS.bars then
 		HS.bars = {}
 	end
@@ -126,13 +126,7 @@ function HS.BuildBars()
 		else
 			item:SetPoint( "TOPLEFT", HS.bars[idx-1].bar, "BOTTOMLEFT", 0, 0 )
 		end
-
-		local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(110560)
-		-- print( item:GetName() )
-		name = name or "Place holder"
-		_G[item:GetName().."ToyName"]:SetText( name )
-		_G[item:GetName().."Icon"]:SetTexture( icon )
-		item:Show()
+		item:Hide()
 	end
 end
 --------
