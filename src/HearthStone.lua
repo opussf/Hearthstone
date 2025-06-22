@@ -373,7 +373,7 @@ function HS.Command( msg )
 	if cmdFunc and cmdFunc.func then
 		cmdFunc.func(param)
 	else
-		HSConfig:Show()
+		HS.ShowConfig()
 	end
 end
 function HS.PrintHelp()

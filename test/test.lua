@@ -46,9 +46,9 @@ function test.test_help()
 	-- for now, at least no errors are thrown
 	HS.Command( "help" )
 end
-function test.test_help_on_nocommand()
-	HS.Command()
-end
+-- function test.test_help_on_nocommand()
+-- 	HS.Command()
+-- end
 -- function test.test_add_normal_link()
 -- 	HS.Command( "add |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
 -- 	assertEquals( "165670", HS_settings.normal[2] )

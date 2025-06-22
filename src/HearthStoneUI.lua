@@ -1,9 +1,22 @@
 HS_SLUG, HS      = ...
+HS.displayList = {}
+
+function HS.ShowConfig()
+	HSConfig:ClearAllPoints()
+	HSConfig:SetPoint("CENTER", "$parent", "CENTER")
+	HSConfig:Show()
+	HS.UpdateUI()
+	EventRegistry:RegisterCallback("CollectionsJournal.TabSet", function(event, _, tabIndex)
+		if tabIndex == 3 then
+			HSConfig:ClearAllPoints()
+			HSConfig:SetPoint("LEFT", "CollectionsJournal", "RIGHT")
+		end
+	end, HS_SLUG )
+end
 HS.commandList["config"] = {
-	["func"] = function() HSConfig:Show();HS.UpdateUI() end,
+	["func"] = HS.ShowConfig,
 	["help"] = {"", "Config"}
 }
-HS.displayList = {}
 
 function HS.UIInit()
 	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
@@ -35,7 +48,7 @@ function HS.TagDropDownPopulate( self, level, menuList )
 end
 function HS.SetTagForEdit( info )
 	-- takes the info table
-	print( "SetTagForEdit( "..info.value.." )" )
+	-- print( "SetTagForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
 	HS.editTag = info.value
 	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
@@ -62,14 +75,14 @@ function HS.ModifierDropDownInit( self, level, menuList )
 	UIDropDownMenu_SetText( self, "normal" )
 end
 function HS.SetModForEdit( info )
-	print( "SetModForEdit( "..info.value.." )" )
+	-- print( "SetModForEdit( "..info.value.." )" )
 	-- UIDropDownMenu_SetText( )
 	UIDropDownMenu_SetText( HSConfig_ModifierDropDownMenu, info.value )
 	HS.UpdateUI()
 end
 -------
 function HS.TagButtonOnClick( self, action )
-	print( "TagButtonOnClick( ", self, ", ", action, " )" )
+	-- print( "TagButtonOnClick( ", self, ", ", action, " )" )
 	if action == "add" then
 		local newTag = HSConfig_TagEditBox:GetText()
 		if string.len( newTag ) > 0 then
@@ -77,7 +90,7 @@ function HS.TagButtonOnClick( self, action )
 				newTag = "#"..newTag
 			end
 			if not HS_settings.tags[newTag] then
-				print( "add: ", newTag )
+				-- print( "add: ", newTag )
 				HS_settings.tags[newTag] = {}
 				HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 			end
@@ -90,7 +103,7 @@ function HS.TagButtonOnClick( self, action )
 				newTag = "#"..newTag
 			end
 			if not HS_settings.tags[newTag] then
-				print( "rename: ", selectedTag, "=>", newTag )
+				-- print( "rename: ", selectedTag, "=>", newTag )
 				HS_settings.tags[newTag] = HS_settings.tags[selectedTag]
 				HS_settings.tags[selectedTag] = nil
 				HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
@@ -102,7 +115,7 @@ function HS.TagButtonOnClick( self, action )
 	elseif action == "del" then
 		local selectedTag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
 		if selectedTag then
-			print( "delete:", selectedTag )
+			-- print( "delete:", selectedTag )
 			HS_settings.tags[selectedTag] = nil
 			HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 		end
@@ -134,7 +147,7 @@ function HS.UpdateUI()
 	if HSConfig:IsVisible() and HS_settings.tags then
 		local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
 		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
-		print( tag, mod )
+		-- print( tag, mod )
 		local count = ( HS_settings.tags[tag][mod] and #HS_settings.tags[tag][mod] or 0 )
 		HSConfig_ToyListVSlider:SetMinMaxValues( 0, max( 0, count-9 ) )
 		if count > 0 then
@@ -178,10 +191,13 @@ end
 function HS.UIOnDragStop()
 	HSConfig:StopMovingOrSizing()
 end
+function HS.UIOnHide()
+	EventRegistry:UnregisterCallback("CollectionsJournal.TabSet", HS_SLUG)
+end
 function HS.UIOnReceiveDrag( self )
-	print( "HS.UIOnReceiveDrag( ", self, " )" )
+	-- print( "HS.UIOnReceiveDrag( ", self, " )" )
 	local type, itemID, itemLink = GetCursorInfo()
-	print( type, itemID, itemLink )
+	-- print( type, itemID, itemLink )
 	if type == "item" then
 		local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
 		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
@@ -195,7 +211,7 @@ function HS.UIOnReceiveDrag( self )
 	HS.UpdateUI()
 end
 function HS.DelToyButtonOnClick( self )
-	print( "HS.BarOnMouseDown( ", self, " )" )
+	-- print( "HS.BarOnMouseDown( ", self, " )" )
 	local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
 	local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
 	local idx = self:GetParent().itemIdx
@@ -205,4 +221,8 @@ function HS.DelToyButtonOnClick( self )
 		HS_settings.tags[tag][mod] = nil
 	end
 	HS.UpdateUI()
+end
+-------
+function HS.ToyBoxButtonOnClick( self )
+	ToggleCollectionsJournal(3)
 end

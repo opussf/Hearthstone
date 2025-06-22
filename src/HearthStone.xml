@@ -176,7 +176,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Toy Box"])</OnLoad>
-					<OnClick>ToggleCollectionsJournal(3)</OnClick>
+					<OnClick>HS.ToyBoxButtonOnClick( self )</OnClick>
 				</Scripts>
 			</Button>
 			<Frame name="$parent_ToyList" parentKey="ToyList">
@@ -224,6 +224,7 @@
 			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
 			<OnMouseDown>HS.UIOnDragStart()</OnMouseDown>
 			<OnMouseUp>HS.UIOnDragStop()</OnMouseUp>
+			<OnHide>HS.UIOnHide()</OnHide>
 		</Scripts>
 	</Frame>
 </Ui>
