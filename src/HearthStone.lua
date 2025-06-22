@@ -215,8 +215,8 @@ function HS.GetItemFromList( list )
 					HS.LogMsg("HearthStone: "..(GetItemCount(list[r]) or "no count"), HS_settings.debug)
 					r = (GetItemCount(list[r]) == 1 and r or nil) -- HearthStone is an item, clear the selection if not in bags
 				else
-					HS.LogMsg( "PlayerHasToy: "..(PlayerHasToy(list[r]) and "true" or "false" ), HS_settings.debug)
-					HS.LogMsg( "IsToyUsable : "..(C_ToyBox.IsToyUsable(list[r]) and "true" or "false"), HS_settings.debug)
+					-- HS.LogMsg( "PlayerHasToy: "..(PlayerHasToy(list[r]) and "true" or "false" ), HS_settings.debug)
+					-- HS.LogMsg( "IsToyUsable : "..(C_ToyBox.IsToyUsable(list[r]) and "true" or "false"), HS_settings.debug)
 					-- @TODO: Determine when to not select an item in a list
 					-- if not PlayerHasToy(list[r]) or not C_ToyBox.IsToyUsable(list[r]) then
 						-- r = nil
