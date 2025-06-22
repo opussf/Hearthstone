@@ -217,6 +217,13 @@
 					<Size x="12" y="25"/>
 				</ThumbTexture>
 			</Slider>
+			<EditBox name="$parent_Preview" autoFocus="false" enableMouse="false" enableKeyboard="false">
+				<Size x="650" y="32"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_ToyList" relativePoint="BOTTOMLEFT" x="0" y="-10"/>
+				</Anchors>
+				<FontString inherits="GameFontHighlight"/>
+			</EditBox>
 		</Frames>
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
@@ -228,44 +235,3 @@
 		</Scripts>
 	</Frame>
 </Ui>
-<!--
-
-<Slider name="RestedScrollFrame_VSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
-				<Size x="12" y="82"/>
-				<Anchors>
-					<Anchor point="Right" relativePoint="RIGHT" relativeTo="RestedScrollFrame"/>
-				</Anchors>
-				<Scripts>
-					<OnLoad>self:SetValue(0)</OnLoad>
-					<OnValueChanged>Rested.UIUpdateFrame()</OnValueChanged>
-				</Scripts>
-				<ThumbTexture name="$parentThumbTexture"
-						file="Interface\Buttons\UI-ScrollBar-Knob">
-					<Size x="12" y="25"/>
-				</ThumbTexture>
-			</Slider>
-	<Button name="$parent_TestEmoteButton" inherits="UIPanelButtonTemplate" text="Test Emote">
-				<Size>
-					<AbsDimension x="120" y="24"/>
-				</Size>
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="$parent_DoEmoteEditBox" relativePoint="RIGHT" >
-						<Offset><AbsDimension x="10" y="0" /></Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						local emote = _G[self:GetParent():GetName() .."_DoEmoteEditBox"]:GetText();
-						if _G[self:GetParent():GetName() .."_DoEmote"]:GetChecked() then
-							DoEmote( emote )
-						end
-					</OnClick>
-				</Scripts>
-			</Button>
-
-
-/run SetRaidDifficultyID(16)
-/script HSConfig:Show()
-/script HSConfig:Hide()
-
--->

@@ -178,6 +178,8 @@ function HS.UpdateUI()
 				HS.bars[i].bar:Hide()
 			end
 		end
+		HSConfig_Preview:SetText( HS.MakeUseLine( tag ) )
+		HSConfig_Preview:SetCursorPosition(0)
 	end
 end
 function HS.UIMouseWheel( delta )
