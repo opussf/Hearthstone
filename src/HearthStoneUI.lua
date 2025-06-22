@@ -134,6 +134,7 @@ function HS.UpdateUI()
 	if HSConfig:IsVisible() and HS_settings.tags then
 		local tag = UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )
 		local mod = UIDropDownMenu_GetText( HSConfig_ModifierDropDownMenu )
+		print( tag, mod )
 		local count = ( HS_settings.tags[tag][mod] and #HS_settings.tags[tag][mod] or 0 )
 		HSConfig_ToyListVSlider:SetMinMaxValues( 0, max( 0, count-9 ) )
 		if count > 0 then
@@ -151,7 +152,7 @@ function HS.UpdateUI()
 						HS.bars[i].bar.itemIdx = idx
 						HS.bars[i].bar:Show()
 					else
-						print( "name:", name, icon )
+						-- print( "name:", name, icon )
 						HS.toCache = HS.toCache or {}
 						HS.toCache[tonumber(HS_settings.tags[tag][mod][idx])] = true
 					end

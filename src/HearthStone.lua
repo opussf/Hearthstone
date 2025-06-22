@@ -16,9 +16,8 @@ COLOR_END = "|r"
 
 -- saved log file
 HS_log = {}
-HS_settings = {
-	["normal"] = {"6948"},  -- default to get you going.   Can remove
-}
+HS_settings = {}
+HS_settings.tags = { ["#hs"] = { ["normal"] = {6948}, } }  -- default to get you going.   Can remove
 HS.modOrder = {
 	"shiftctrlalt", "shiftctrl", "shiftalt", "shift", "ctrlalt", "ctrl", "alt"
 }
@@ -81,10 +80,10 @@ function HS.PLAYER_LOGIN( )
 	HS.UIInit()
 end
 function HS.GET_ITEM_INFO_RECEIVED( _, itemID, success )
-	print( "GET_ITEM_INFO_RECEIVED:", itemID, type(itemID), success )
+	-- print( "GET_ITEM_INFO_RECEIVED:", itemID, type(itemID), success )
 	if HS.toCache then
 		if HS.toCache[itemID] then
-			print( "Was in the cache" )
+			-- print( "Was in the cache" )
 			HS.toCache[itemID] = nil
 			HS.UpdateUI()
 		else
@@ -92,12 +91,12 @@ function HS.GET_ITEM_INFO_RECEIVED( _, itemID, success )
 			for i in pairs( HS.toCache ) do
 				cacheCount = cacheCount + 1
 				local name = GetItemInfo( i )
-				print( "re-request:", i, type(i), name )
+				-- print( "re-request:", i, type(i), name )
 			end
-			print( "toCacheSize:", cacheCount )
-			if cacheCount == 0 then
-				print( "Cache is empty" )
-			end
+			-- print( "toCacheSize:", cacheCount )
+			-- if cacheCount == 0 then
+			-- 	print( "Cache is empty" )
+			-- end
 		end
 	end
 end
@@ -123,12 +122,12 @@ function HS.LOADING_SCREEN_DISABLED()
 	HS.shouldUpdateMacros = true
 	HSFrame:RegisterEvent( "GET_ITEM_INFO_RECEIVED" )
 	for tag, mods in pairs( HS_settings.tags ) do
-		print( "tag:"..tag )
+		-- print( "tag:"..tag )
 		for mod, items in pairs( mods ) do
-			print( "mod:"..mod )
+			-- print( "mod:"..mod )
 			for i,item in pairs( items ) do
 				name = GetItemInfo( item )
-				print( i, item, name )
+				-- print( i, item, name )
 				if not name then
 					HS.toCache = HS.toCache or {}
 					HS.toCache[tonumber(item)] = true
@@ -168,7 +167,7 @@ function HS.UpdateMacros()
 		return
 	end
 	-- Update Macros
-	HS.LogMsg( "Update Macro", HS_settings.debug )
+	-- HS.LogMsg( "Update Macro", HS_settings.debug )
 	HS.suspendUpdateEvent = true
 
 	-- loop through all macros
@@ -177,19 +176,19 @@ function HS.UpdateMacros()
 	for macroIndex = 1, 120+numCharacter do  -- can do 2 loops, or 1 loop and not update unnamed macros.
 		local name, _, body = GetMacroInfo( macroIndex )
 		if name then
-			HS.LogMsg( macroIndex..":"..(name or "?")..":"..(body or "nil") )
+			-- HS.LogMsg( macroIndex..":"..(name or "?")..":"..(body or "nil") )
 			HS.macroTable = {}
 			HS.ListToTable( body, HS.macroTable )
 			for lnum, line in ipairs( HS.macroTable ) do
 				s, e, hash = strfind( line, "(#%S+)$" )
-				HS.LogMsg( lnum.."> "..line.." "..(s or "").."->"..(e or "").."="..(hash or "nil") )
 				if hash and not HS.hashIgnore[hash] and HS_settings.tags[hash] then
+					-- HS.LogMsg( lnum.."> "..line.." "..(s or "").."->"..(e or "").."="..(hash or "nil") )
 					HS.macroTable[lnum] = HS.MakeUseLine( hash )
 				end
 			end
 			local macroText = table.concat( HS.macroTable, "\n" )
 			if strlen( macroText ) <= 255 then
-				HS.LogMsg( "Edit macro", HS_settings.debug )
+				-- HS.LogMsg( "Edit macro", HS_settings.debug )
 				EditMacro( macroIndex, nil, nil, macroText)
 			else
 				HS.LogMsg( string.format( HS.L["ERROR"].." ("..name.."-"..(hash or "").."): "..HS.L["Macro length > 255 chars."].." "..HS.L["Please edit source macro."] ), true )

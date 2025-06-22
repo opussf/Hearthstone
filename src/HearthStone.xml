@@ -47,7 +47,7 @@
 			</OnEvent>
 		</Scripts>
 	</Frame>
-	<Frame name="HSConfig" toplevel="true" parent="UIParent" enableMouse="true" movable="true" resizable="false">
+	<Frame name="HSConfig" toplevel="true" parent="UIParent" enableMouse="true" movable="true" hidden="true" resizable="false">
 		<Size x="700" y="500" />
 		<Anchors>
 			<Anchor point="CENTER"/>
