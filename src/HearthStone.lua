@@ -145,7 +145,7 @@ function HS.PLAYER_STARTED_MOVING()
 end
 function HS.UPDATE_MACROS()
 	if HS.suspendUpdateEvent then return; end
-	HS.LogMsg( "UPDATE_MACROS", true )
+	HS.LogMsg( "UPDATE_MACROS", HS_settings.debug )
 	HS.UpdateMacros()
 end
 function HS.MakeUseLine( hash )
