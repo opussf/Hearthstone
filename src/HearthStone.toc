@@ -14,4 +14,5 @@ localization_es.lua
 localization_pt.lua
 
 HearthStone.lua
+HearthStoneUI.lua
 HearthStone.xml
