@@ -222,7 +222,8 @@
 			<OnLoad>self:Hide()</OnLoad>
 			<OnMouseWheel>HS.UIMouseWheel( delta )</OnMouseWheel>
 			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
-			<OnMouseUp>HS.UIOnMouseUp( self, button )</OnMouseUp>
+			<OnMouseDown>HS.UIOnDragStart()</OnMouseDown>
+			<OnMouseUp>HS.UIOnDragStop()</OnMouseUp>
 		</Scripts>
 	</Frame>
 </Ui>

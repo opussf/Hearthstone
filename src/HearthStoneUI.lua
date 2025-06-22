@@ -1,6 +1,6 @@
 HS_SLUG, HS      = ...
 HS.commandList["config"] = {
-	["func"] = function() HSConfig:Show() end,
+	["func"] = function() HSConfig:Show();HS.UpdateUI() end,
 	["help"] = {"", "Config"}
 }
 HS.displayList = {}
@@ -172,6 +172,12 @@ function HS.UIMouseWheel( delta )
 		HSConfig_ToyListVSlider:GetValue() - delta
 	)
 end
+function HS.UIOnDragStart()
+	HSConfig:StartMoving()
+end
+function HS.UIOnDragStop()
+	HSConfig:StopMovingOrSizing()
+end
 function HS.UIOnReceiveDrag( self )
 	print( "HS.UIOnReceiveDrag( ", self, " )" )
 	local type, itemID, itemLink = GetCursorInfo()
@@ -187,11 +193,6 @@ function HS.UIOnReceiveDrag( self )
 	end
 	ClearCursor()
 	HS.UpdateUI()
-end
-function HS.UIOnMouseUp( self, button )
-	print( "HS.UIOnMouseUp( ", self, ", ", button, " )" )
-	local type, itemID, itemLink = GetCursorInfo()
-	print( type, itemID, itemLink )
 end
 function HS.DelToyButtonOnClick( self )
 	print( "HS.BarOnMouseDown( ", self, " )" )
