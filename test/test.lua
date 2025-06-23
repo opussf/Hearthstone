@@ -42,28 +42,10 @@ function test.test_event_regenEnabled()
 	assertIsNil( HS.inCombat, "HS.inCombat should be nil." )
 end
 function test.test_help()
-	-- going to be hard to test unless the help (print) gets captured
-	-- for now, at least no errors are thrown
+-- 	-- going to be hard to test unless the help (print) gets captured
+-- 	-- for now, at least no errors are thrown
 	HS.Command( "help" )
 end
--- function test.test_help_on_nocommand()
--- 	HS.Command()
--- end
--- function test.test_add_normal_link()
--- 	HS.Command( "add |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
--- 	assertEquals( "165670", HS_settings.normal[2] )
--- end
--- function test.test_add_alt_shift_link()
--- 	HS.Command( "add shiftalt |cff0070dd|Hitem:165670::::::::70:258:::::::::|h[Peddlefeet's Lovely Hearthstone]|h|r" )
--- 	assertEquals( "165670", HS_settings["shiftalt"][1] )
--- end
--- function test.test_add_normal_nolink()
--- 	HS.Command( "add" )
--- end
--- function test.test_remove_normal()
--- 	HS.Command( "remove |cffffffff|Hitem:6948::::::::70:258:::::::::|h[Hearthstone]|h|r" )
--- 	assertIsNil( HS_settings.normal )
--- end
 function test.test_update_simple()
 	HS_settings.tags["#hs"].normal[1] = "165670"
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
