@@ -11,5 +11,5 @@ if GetLocale() == "ruRU" then
     L.L["Delete"] = "Удалить"
     L.L["Rename"] = "Переименовать"
     L.L["Add"] = "Добавить"
-    L.L["Toy Box"] = "Коробка с игрушками"
+    L.L["Toy Box"] = "Игрушки"
 end
