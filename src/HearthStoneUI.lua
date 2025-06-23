@@ -229,3 +229,6 @@ end
 function HS.ToyBoxButtonOnClick( self )
 	ToggleCollectionsJournal(3)
 end
+function HS.UIAdjustButton( self )
+	self:SetWidth( self.Text:GetStringWidth() + 24 )
+end
