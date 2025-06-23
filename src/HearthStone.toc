@@ -16,6 +16,7 @@ localization_core.lua
 localization_de.lua
 localization_es.lua
 localization_fr.lua
+localization_it.lua
 localization_pt.lua
 localization_ru.lua
 
