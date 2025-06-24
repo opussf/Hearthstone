@@ -90,6 +90,26 @@ function test.test_update_seeds()
 			myMacros.general[1].text
 	)
 end
+function test.test_update_inCombat()
+	HS.PLAYER_REGEN_DISABLED()
+	HS.Command( "update" )
+	assertTrue( HS.combatUpdate )
+end
+function test.test_update_afterCombat()
+	HS_settings.tags["#hs"].normal[1] = "5567"
+	HS_settings.tags["#hs"]["alt"] = { "1234" }
+	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
+	HS.combatUpdate = true
+	HS.PLAYER_REGEN_ENABLED()
+	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
+end
+function test.test_UPDATE_MACROS_triggersUpdate()
+	HS_settings.tags["#hs"].normal[1] = "5567"
+	HS_settings.tags["#hs"]["alt"] = { "1234" }
+	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
+	HS.UPDATE_MACROS()
+	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
+end
 function test.test_long_macro_old_method_does_not_destroy()
 	myMacros.general = { { ["name"] = "testmacro", ["icon"] = "",
 		["text"] = "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:1234#hs\n0123456789012345678901234567890\n2345"
