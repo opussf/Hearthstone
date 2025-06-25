@@ -3,6 +3,7 @@
 ## Notes: HearthStone (v@VERSION@)
 ## Author: opussf
 ## Version: @VERSION@
+## IconTexture: Interface/Icons/inv_misc_rune_01
 ## Description: Allows building a Hearthstone macro with random stones
 ## Description-deDE: Ermöglicht das Erstellen eines Hearthstone-Makros mit zufälligen Steinen.
 ## Description-esES: Permite construir una macro de Piedra de hogar con piedras aleatorias.
