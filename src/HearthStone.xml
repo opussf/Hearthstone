@@ -37,6 +37,7 @@
 		</Frames>
 		<Scripts>
 			<OnMouseDown>HS.UIBarOnMouseDown()</OnMouseDown>
+			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
 		</Scripts>
 	</Frame>
 
@@ -198,6 +199,9 @@
 						</Texture>
 					</Layer>
 				</Layers>
+				<Scripts>
+					<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
+				</Scripts>
 			</Frame>
 			<Slider name="$parent_ToyListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
 				<Size x="12" y="328"/>
