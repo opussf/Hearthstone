@@ -52,7 +52,7 @@
 		</Scripts>
 	</Frame>
 	<Frame name="HSConfig" toplevel="true" parent="UIParent" enableMouse="true" movable="true" hidden="true" resizable="false">
-		<Size x="700" y="500" />
+		<Size x="600" y="500" />
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
@@ -67,12 +67,15 @@
 			</Layer>
 			<Layer level="ARTWORK">
 				<!-- Header -->
-				<FontString name="$parent_Header" inherits="GameFontNormalLarge" text="HearthStone @VERSION@">
+				<FontString name="$parent_Header" inherits="GameFontNormalLarge" text="HearthStone">
 					<Anchors>
 						<Anchor point="TOP" relativePoint="TOP">
 							<Offset x="0" y="-10"/>
 						</Anchor>
 					</Anchors>
+					<Scripts>
+						<OnLoad>self:SetText("HearthStone "..HS.MSG_VERSION)</OnLoad>
+					</Scripts>
 				</FontString>
 			</Layer>
 		</Layers>
@@ -128,7 +131,7 @@
 				</Scripts>
 			</Button>
 			<EditBox name="$parent_TagEditBox" parentKey="TagEditBox" inherits="InputBoxTemplate">
-				<Size x="150" y="30" />
+				<Size x="80" y="30" />
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_EditTagButton">
 						<Offset>
