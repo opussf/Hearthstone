@@ -116,46 +116,32 @@
 					<OnClick>HS.TagButtonOnClick( self, "del" )</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parent_EditTagButton" parentKey="EditTagButton" inherits="UIPanelButtonTemplate">
-				<Size x="76" y="30" />
+			<Button name="$parent_AddTagButton" parentKey="AddTagButton" inherits="UIPanelButtonTemplate">
 				<Anchors>
-					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_DelTagButton">
-						<Offset>
-							<AbsDimension x="80" y="0" />
-						</Offset>
-					</Anchor>
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent" x="-38" y="-42"/>
 				</Anchors>
 				<Scripts>
-					<OnLoad>self:SetText(HS.L["Rename"]);HS.UIAdjustButton(self)</OnLoad>
-					<OnClick>HS.TagButtonOnClick( self, "edit" )</OnClick>
+					<OnLoad>self:SetText(HS.L["Add"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.TagButtonOnClick( self, "add" )</OnClick>
 				</Scripts>
 			</Button>
 			<EditBox name="$parent_TagEditBox" parentKey="TagEditBox" inherits="InputBoxTemplate">
 				<Size x="80" y="30" />
 				<Anchors>
-					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_EditTagButton">
-						<Offset>
-							<AbsDimension x="10" y="0"/>
-						</Offset>
-					</Anchor>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent_AddTagButton" x="-10" y="0"/>
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetAutoFocus( false )</OnLoad>
 					<!-- <OnTextChanged>Rested.updateFilter()</OnTextChanged> -->
 				</Scripts>
 			</EditBox>
-			<Button name="$parent_AddTagButton" parentKey="AddTagButton" inherits="UIPanelButtonTemplate">
-				<Size x="76" y="30" />
+			<Button name="$parent_EditTagButton" parentKey="EditTagButton" inherits="UIPanelButtonTemplate">
 				<Anchors>
-					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_TagEditBox">
-						<Offset>
-							<AbsDimension x="10" y="0" />
-						</Offset>
-					</Anchor>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent_TagEditBox" x="-10" y="0"/>
 				</Anchors>
 				<Scripts>
-					<OnLoad>self:SetText(HS.L["Add"]);HS.UIAdjustButton(self)</OnLoad>
-					<OnClick>HS.TagButtonOnClick( self, "add" )</OnClick>
+					<OnLoad>self:SetText(HS.L["Rename"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.TagButtonOnClick( self, "edit" )</OnClick>
 				</Scripts>
 			</Button>
 			<Frame name="$parent_ModifierDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="ModifierDropDownMenu">
