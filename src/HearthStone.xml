@@ -35,6 +35,9 @@
 				</Scripts>
 			</Button>
 		</Frames>
+		<Scripts>
+			<OnMouseDown>HS.UIBarOnMouseDown()</OnMouseDown>
+		</Scripts>
 	</Frame>
 
 	<Frame name="HSFrame"  frameStrata="BACKGROUND" toplevel="false" parent="UIParent">
@@ -229,8 +232,8 @@
 			<OnLoad>self:Hide()</OnLoad>
 			<OnMouseWheel>HS.UIMouseWheel( delta )</OnMouseWheel>
 			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
-			<OnMouseDown>HS.UIOnDragStart()</OnMouseDown>
-			<OnMouseUp>HS.UIOnDragStop()</OnMouseUp>
+			<OnMouseDown>HS.UIOnMouseDown()</OnMouseDown>
+			<OnMouseUp>HS.UIOnMouseUp()</OnMouseUp>
 			<OnHide>HS.UIOnHide()</OnHide>
 		</Scripts>
 	</Frame>

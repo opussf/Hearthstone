@@ -25,3 +25,5 @@ TODO.md
 	Use Frame:SetScript to register and remove the OnUpdate script.
 	Set a delay of 1 or 2 seconds.
 
+
+[ ] Look into making an expanible icon sort of thing  (mage portal spells)
