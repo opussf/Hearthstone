@@ -193,3 +193,55 @@ end
 
 
 ExportUtil.ConvertFromBase64( "YhtWUmEUpT+EVPUM5QhG6F03HWEmJueGgeZekzJAIAWAgOiQAKAOAhLceAg/aA" )
+
+
+---
+Link format:
+|cFF00FF00|Hmyaddon:someData|h[MyAddon: Info]|h|r
+
+Handle:
+-- Save the original SetItemRef
+local orig_SetItemRef = SetItemRef
+
+function SetItemRef(link, text, button, chatFrame)
+    local linkType, payload = link:match("^(%a+):(.+)$")
+    if linkType == "myaddon" then
+        -- Handle your custom link
+        print("You clicked a MyAddon link! Payload:", payload)
+        -- You can open a custom frame or show info here
+        return
+    end
+    -- Call the original for all other links
+    orig_SetItemRef(link, text, button, chatFrame)
+end
+
+
+Tooltip:
+local function showTooltip(self, linkData)
+    local linkType = string.split(":", linkData)
+    if linkType == "myaddon" then
+        GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+        GameTooltip:SetText("Your custom info here")
+        GameTooltip:Show()
+    end
+end
+
+local function hideTooltip()
+    GameTooltip:Hide()
+end
+
+for i = 1, NUM_CHAT_WINDOWS do
+    local frame = _G["ChatFrame"..i]
+    if frame then
+        frame:HookScript("OnHyperlinkEnter", showTooltip)
+        frame:HookScript("OnHyperlinkLeave", hideTooltip)
+    end
+end
+
+
+
+
+
+
+
+
