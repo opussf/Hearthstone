@@ -231,6 +231,22 @@
 				</Anchors>
 				<FontString inherits="GameFontHighlight"/>
 			</EditBox>
+			<Button name="$parent_Import" inherits="UIPanelButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeTo="$parent" x="-50" y="-84"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Import"]);HS.UIAdjustButton(self)</OnLoad>
+				</Scripts>
+			</Button>
+			<Button name="$parent_Export" inherits="UIPanelButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent_Import" relativePoint="LEFT" x="-10"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Export"]);HS.UIAdjustButton(self)</OnLoad>
+				</Scripts>
+			</Button>
 		</Frames>
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
