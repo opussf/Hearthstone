@@ -85,7 +85,7 @@
 					<Anchor point="TOPRIGHT" x="0" y="0"/>
 				</Anchors>
 				<Scripts>
-					<OnClick>self:GetParent():Hide(); HS.UpdateMacros()</OnClick>
+					<OnClick>self:GetParent():Hide();HSExport:Hide();HSImport:Hide();HS.UpdateMacros()</OnClick>
 				</Scripts>
 			</Button>
 			<Frame name="$parent_TagDropDownMenu" inherits="UIDropDownMenuTemplate" parentKey="TagDropDownMenu">
@@ -333,6 +333,9 @@
 					<Anchor point="BOTTOMLEFT" x="5"/>
 				</Anchors>
 				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+				<Scripts>
+					<OnShow>self:SetText(HS.L["New"])</OnShow>
+				</Scripts>
 			</EditBox>
 			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
 				<Anchors>
@@ -349,6 +352,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Add"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.ImportFromString()</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>

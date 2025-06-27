@@ -23,7 +23,6 @@ function HS.UIInit()
 	HS.ModifierDropDownBuild( HSConfig_ModifierDropDownMenu )
 	HS.BuildBars()
 end
-
 function HS.TagDropDownBuild( self )
 	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
 	UIDropDownMenu_JustifyText( self, "LEFT" )
@@ -55,7 +54,6 @@ function HS.SetTagForEdit( info )
 	HSConfig_TagEditBox:SetText( info.value )
 	HS.UpdateUI()
 end
-
 function HS.ModifierDropDownBuild( self )
 	UIDropDownMenu_Initialize( self, HS.ModifierDropDownInit )
 	UIDropDownMenu_JustifyText( self, "LEFT" )
@@ -275,10 +273,43 @@ function HS.ExportOnClick()
 	HSExport_EditBox:SetText(HS.BuildExportString())
 	HSExport_EditBox:HighlightText()
 	HSExport:Show()
-	C_Timer.After(15, function() HSExport:Hide(); end)
+	C_Timer.After(20, function() HSExport:Hide(); end)
 end
 ---------
 function HS.ImportOnClick()
 	HSExport:Hide()
 	HSImport:Show()
+end
+function HS.ImportFromString()
+	local newTag = HSImport_TagEditBox:GetText()
+	local importString = HSImport_EditBox:GetText()
+	if string.len( newTag ) > 0 and string.len( importString ) > 0 then
+		local modList = { [0]="normal" }
+		for _, mod in ipairs( HS.modOrder ) do
+			table.insert( modList, mod )
+		end
+		if string.sub( newTag, 1, 1 ) ~= "#" then
+			newTag = "#"..newTag
+		end
+		if not HS_settings.tags[newTag] then
+			HS_settings.tags[newTag] = {}
+			local IDS = ImportDataStreamMixin
+			IDS:Init( importString )
+			local itemBitWidth = IDS:ExtractValue( 5 )
+			local idx = IDS:ExtractValue( 3 )
+			while idx do
+				local itemCount = IDS:ExtractValue( 8 )
+				local itemID
+				for i = 1,itemCount do
+					itemID = IDS:ExtractValue( itemBitWidth )
+					HS_settings.tags[newTag][modList[idx]] = HS_settings.tags[newTag][modList[idx]] or {}
+					table.insert( HS_settings.tags[newTag][modList[idx]], itemID )
+				end
+				idx = IDS:ExtractValue( 3 )  -- sets to nil if no more data
+			end
+		end
+		HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+		UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, newTag )
+		HSConfig_TagEditBox:SetText( newTag )
+	end
 end
