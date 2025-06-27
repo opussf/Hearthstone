@@ -3,5 +3,5 @@ target/
 HearthStone-cf/
 coverage.xml
 
-*.sublime*
 ref/
+runmany.sh

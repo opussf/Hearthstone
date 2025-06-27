@@ -26,65 +26,262 @@ Brewfest Reveler's Hearthstone   item:166747
 Greatfather Winter's Hearthstone item:162973
 
 
+ExportUtil.ConvertToBase64( dataEntries )
+
+dataEntries = {
+    { value,
+      bitWidth
+       }
+}
 
 
-local function gatherAllToys()
 
-    -- if we have already gathered all toys into allToys, leave
-    if #allToys==C_ToyBox.GetNumTotalDisplayedToys() then
+
+dataEntries = {
+    { value=20, bitWitdh=5 }, -- bitSize
+    { value=11, bitWidth=8 }, -- count -- index0
+    { value=166747, bitWidth=20 },
+    { value=172179, bitWidth=20 },
+    { value=162973, bitWidth=20 },
+    { value=165802, bitWidth=20 },
+    { value=165670, bitWidth=20 },
+    { value=193588, bitWidth=20 },
+    { value=64488, bitWidth=20 },
+    { value=209035, bitWidth=20 },
+    { value=212337, bitWidth=20 },
+    { value=208704, bitWidth=20 },
+    { value=236687, bitWidth=20 },
+    { value=0, bitWidth=8 },  -- index1
+    { value=0, bitWidth=8 },  -- index2
+    { value=1, bitWidth=8 },  -- index3
+    { value=140192, bitWidth=20 },
+    { value=0, bitWidth=8 },  -- index4
+    { value=0, bitWidth=8 },  -- index5
+    { value=1, bitWidth=8 },  -- index6
+    { value=230850, bitWidth=20 },
+    { value=1, bitWidth=8 },  -- index7
+    { value=110560, bitWidth=20 },
+}
+
+
+di = ImportDataStreamMixin
+di:Init( "string" )
+di:ExtractValue( 3 )
+di:ExtractValue( 8 )
+di:ExtractValue( 20 )
+
+
+bit = {}
+function bit.lshift( x, by )
+    return x * 2 ^ by
+end
+function bit.rshift( x, by )
+    return math.floor( x / 2 ^ by )
+end
+function bit.bor( a, b )  -- bitwise or
+    local p,c=1,0
+    while a+b>0 do
+        local ra,rb=a%2,b%2
+        if ra+rb>0 then c=c+p end
+        a,b,p=(a-ra)/2,(b-rb)/2,p*2
+    end
+    return c
+end
+function bit.band( a, b ) -- bitwise and
+    local p,c=1,0
+    while a>0 and b>0 do
+        local ra,rb=a%2,b%2
+        if ra+rb>1 then c=c+p end
+        a,b,p=(a-ra)/2,(b-rb)/2,p*2
+    end
+    return c
+end
+function bit.bnot( n )  -- bitwise not
+    local p,c=1,0
+    while n>0 do
+        local r=n%2
+        if r<1 then c=c+p end
+        n,p=(n-r)/2,p*2
+    end
+    return c
+end
+
+ExportUtil = {};
+
+BitsPerChar = 6;
+
+function MakeBase64ConversionTable()
+    local base64ConversionTable = {};
+    base64ConversionTable[0] = 'A';
+    for num = 1, 25 do
+        table.insert(base64ConversionTable, string.char(65 + num));
+    end
+
+    for num = 0, 25 do
+        table.insert(base64ConversionTable, string.char(97 + num));
+    end
+
+    for num = 0, 9 do
+        table.insert(base64ConversionTable, tostring(num));
+    end
+
+    table.insert(base64ConversionTable, '+');
+    table.insert(base64ConversionTable, '/');
+    return base64ConversionTable;
+end
+
+NumberToBase64CharConversionTable = MakeBase64ConversionTable();
+Base64CharToNumberConversionTable = tInvert(MakeBase64ConversionTable());
+
+
+function ExportUtil.ConvertToBase64(dataEntries)
+    local exportString = "";
+    local currentValue = 0;
+    local currentReservedBits = 0;
+    local totalBits = 0;
+    for i, dataEntry in ipairs(dataEntries) do
+        local remainingValue = dataEntry.value;
+        local remainingRequiredBits = dataEntry.bitWidth;
+        -- TODO: bit.lshift doesnt work with > 32 bits.  Maybe use maxValue = 2^X instead?
+        local maxValue = bit.lshift(1, remainingRequiredBits);
+        if remainingValue >= maxValue then
+            error(("Data entry has higher value than storable in bitWidth. (%d in %d bits)"):format(remainingValue, remainingRequiredBits));
+            return "";
+        end
+
+        totalBits = totalBits + remainingRequiredBits;
+        while remainingRequiredBits > 0 do
+            local spaceInCurrentValue = (BitsPerChar - currentReservedBits);
+            local maxStorableValue = bit.lshift(1, spaceInCurrentValue);
+            local remainder = remainingValue % maxStorableValue;
+            remainingValue = bit.rshift(remainingValue, spaceInCurrentValue);
+            currentValue = currentValue + bit.lshift(remainder, currentReservedBits);
+
+            if spaceInCurrentValue > remainingRequiredBits then
+                currentReservedBits = (currentReservedBits + remainingRequiredBits) % BitsPerChar;
+                remainingRequiredBits = 0;
+            else
+                exportString = exportString..NumberToBase64CharConversionTable[currentValue];
+                currentValue = 0;
+                currentReservedBits = 0;
+                remainingRequiredBits = remainingRequiredBits - spaceInCurrentValue;
+            end
+        end
+    end
+
+    if currentReservedBits > 0 then
+        exportString = exportString..NumberToBase64CharConversionTable[currentValue];
+    end
+
+    return exportString;
+end
+function ExportUtil.ConvertFromBase64(exportString)
+    local dataValues = {};
+    for i = 1, #exportString do
+        table.insert(dataValues, Base64CharToNumberConversionTable[string.sub(exportString, i, i)]);
+    end
+
+    return dataValues;
+end
+
+
+ExportUtil.ConvertFromBase64( "YhtWUmEUpT+EVPUM5QhG6F03HWEmJueGgeZekzJAIAWAgOiQAKAOAhLceAg/aA" )
+
+
+---
+Link format:
+|cFF00FF00|Hmyaddon:someData|h[MyAddon: Info]|h|r
+
+Handle:
+-- Save the original SetItemRef
+local orig_SetItemRef = SetItemRef
+
+function SetItemRef(link, text, button, chatFrame)
+    local linkType, payload = link:match("^(%a+):(.+)$")
+    if linkType == "myaddon" then
+        -- Handle your custom link
+        print("You clicked a MyAddon link! Payload:", payload)
+        -- You can open a custom frame or show info here
         return
     end
+    -- Call the original for all other links
+    orig_SetItemRef(link, text, button, chatFrame)
+end
 
-    wipe(allToys)
 
-    local oldFilters -- becomes saved toy filters if non-default filters used
-
-    if not C_ToyBoxInfo.IsUsingDefaultFilters() then
-        oldFilters = {
-            collected = C_ToyBox.GetCollectedShown(),
-            uncollected = C_ToyBox.GetUncollectedShown(),
-            unusable = C_ToyBox.GetUnusableShown(),
-            sources = {},
-            expansions = {}
-        }
-        for i=1,C_PetJournal.GetNumPetSources() do -- blizzard uses this for toys really
-            if C_ToyBoxInfo.IsToySourceValid(i) then
-                oldFilters.sources[i] = C_ToyBox.IsSourceTypeFilterChecked(i)
-            end
-        end
-        for i=1,GetNumExpansions() do
-            oldFilters.expansions[i] = C_ToyBox.IsExpansionTypeFilterChecked(i)
-        end
-
-        -- default filters show all toys (collected/uncollected, all sources/expansions)
-        C_ToyBoxInfo.SetDefaultFilters()
-    end
-
-    -- anything in search is not counted towards default filters; clear just to be safe.
-    -- this is only done a second after login where search should have nothing, but it's possible
-    -- a user immediately opened the journal and typed something in
-    C_ToyBox.SetFilterString("")
-
-    -- now go through and capture the itemID of all toys; worry about data cache later
-    for i=1,C_ToyBox.GetNumFilteredToys() do
-        local itemID = C_ToyBox.GetToyFromIndex(i)
-        if itemID then
-            tinsert(allToys,itemID)
-        end
-    end
-
-    -- if any non-default filters were used, restore them
-    if oldFilters then
-        C_ToyBox.SetCollectedShown(oldFilters.collected)
-        C_ToyBox.SetUncollectedShown(oldFilters.uncollected)
-        C_ToyBox.SetUnusableShown(oldFilters.unusable)
-        for i=1,C_PetJournal.GetNumPetSources() do
-            if C_ToyBoxInfo.IsToySourceValid(i) then
-                C_ToyBox.SetSourceTypeFilter(i,oldFilters.sources[i])
-            end
-        end
-        for i=1,GetNumExpansions() do
-            C_ToyBox.SetExpansionTypeFilter(i,oldFilters.expansions[i])
-        end
+Tooltip:
+local function showTooltip(self, linkData)
+    local linkType = string.split(":", linkData)
+    if linkType == "myaddon" then
+        GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+        GameTooltip:SetText("Your custom info here")
+        GameTooltip:Show()
     end
 end
+
+local function hideTooltip()
+    GameTooltip:Hide()
+end
+
+for i = 1, NUM_CHAT_WINDOWS do
+    local frame = _G["ChatFrame"..i]
+    if frame then
+        frame:HookScript("OnHyperlinkEnter", showTooltip)
+        frame:HookScript("OnHyperlinkLeave", hideTooltip)
+    end
+end
+
+
+
+
+
+
+-----
+DressUpFrames.xml   -  Link button:
+            <DropdownButton parentKey="LinkButton" mixin="DressUpModelFrameLinkButtonMixin" inherits="UIPanelButtonTemplate" text="LINK_TRANSMOG_OUTFIT">
+                <KeyValues>
+                    <KeyValue key="menuPointX" type="number" value="15"/>
+                    <KeyValue key="menuPointY" type="number" value="2"/>
+                </KeyValues>
+                <Size x="159" y="22"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="2" y="4"/>
+                </Anchors>
+                <Scripts>
+                    <OnShow method="OnShow"/>
+                    <OnHide method="OnHide"/>
+                    <OnClick method="OnClick"/>
+                </Scripts>
+            </DropdownButton>
+
+
+-- detect ctrl-c
+
+local editbox = CreateFrame("EditBox", nil, UIParent, "InputBoxTemplate")
+editbox:SetAutoFocus(true)
+editbox:SetSize(300, 40)
+editbox:SetPoint("CENTER")
+editbox:SetScript("OnKeyDown", function(self, key)
+    if IsControlKeyDown() then
+        print("Control is being held")
+    end
+    print("Key pressed:", key)
+end)
+editbox:EnableKeyboard(true)
+
+
+Insert text into open chat input box
+
+Here’s how to prefill the chat box with text using ChatFrame_OpenChat:
+
+ChatFrame_OpenChat("Your message here")
+
+This will:
+
+    Open the default chat input box.
+
+    Insert "Your message here" into it.
+
+    Wait for the user to press Enter to send it.
+
+
