@@ -273,7 +273,6 @@ function HS.ExportOnClick()
 	HSExport_EditBox:SetText(HS.BuildExportString())
 	HSExport_EditBox:HighlightText()
 	HSExport:Show()
-	C_Timer.After(20, function() HSExport:Hide(); end)
 end
 function HS.ExportLink()
 	local exportHash = HS.BuildExportString() -- rebuilt in case the editbox is corrupted
