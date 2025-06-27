@@ -39,8 +39,7 @@ dataEntries = {
 
 dataEntries = {
     { value=20, bitWitdh=5 }, -- bitSize
-    { value=0, bitWidth=3 }, -- index
-    { value=11, bitWidth=8 }, -- count
+    { value=11, bitWidth=8 }, -- count -- index0
     { value=166747, bitWidth=20 },
     { value=172179, bitWidth=20 },
     { value=162973, bitWidth=20 },
@@ -52,22 +51,15 @@ dataEntries = {
     { value=212337, bitWidth=20 },
     { value=208704, bitWidth=20 },
     { value=236687, bitWidth=20 },
-    { value=1, bitWidth=3 }, -- index
-    { value=0, bitWidth=8 },
-    { value=2, bitWidth=3 }, -- index
-    { value=0, bitWidth=8 },
-    { value=3, bitWidth=3 }, -- index
-    { value=1, bitWidth=8 },
+    { value=0, bitWidth=8 },  -- index1
+    { value=0, bitWidth=8 },  -- index2
+    { value=1, bitWidth=8 },  -- index3
     { value=140192, bitWidth=20 },
-    { value=4, bitWidth=3 }, -- index
-    { value=0, bitWidth=8 },
-    { value=5, bitWidth=3 }, -- index
-    { value=0, bitWidth=8 },
-    { value=6, bitWidth=3 }, -- index
-    { value=1, bitWidth=8 },
+    { value=0, bitWidth=8 },  -- index4
+    { value=0, bitWidth=8 },  -- index5
+    { value=1, bitWidth=8 },  -- index6
     { value=230850, bitWidth=20 },
-    { value=7, bitWidth=3 }, -- index
-    { value=1, bitWidth=8 },
+    { value=1, bitWidth=8 },  -- index7
     { value=110560, bitWidth=20 },
 }
 
@@ -278,6 +270,18 @@ end)
 editbox:EnableKeyboard(true)
 
 
+Insert text into open chat input box
 
+Here’s how to prefill the chat box with text using ChatFrame_OpenChat:
+
+ChatFrame_OpenChat("Your message here")
+
+This will:
+
+    Open the default chat input box.
+
+    Insert "Your message here" into it.
+
+    Wait for the user to press Enter to send it.
 
 

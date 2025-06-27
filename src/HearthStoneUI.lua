@@ -248,7 +248,6 @@ function HS.BuildExportString()
 	local dataEntries = { { value=itemBitWidth, bitWidth=5 } }  -- come back and set this with the right bitWidth
 	local l2 = math.log(2)
 	for idx = 0, #modList do
-		table.insert( dataEntries, { value=idx, bitWidth=3 } )  -- only need 3 bits for the size of the combos
 		local itemCount = ( hashStruct[modList[idx]] and #hashStruct[modList[idx]] or 0 )
 		table.insert( dataEntries, { value=itemCount, bitWidth=8 } )  -- 8 bits (0-255)
 		if itemCount > 0 then
@@ -275,6 +274,9 @@ function HS.ExportOnClick()
 	HSExport:Show()
 	C_Timer.After(20, function() HSExport:Hide(); end)
 end
+function HS.ExportLink()
+	ChatFrame_OpenChat("Your message here")
+end
 ---------
 function HS.ImportOnClick()
 	HSExport:Hide()
@@ -294,22 +296,24 @@ function HS.ImportFromString()
 		if not HS_settings.tags[newTag] then
 			local itemID
 			HS_settings.tags[newTag] = {}
-			local IDS = ImportDataStreamMixin
+			local IDS = CreateFromMixins( ImportDataStreamMixin )
 			IDS:Init( importString )
+			-- print( "-bits:", IDS:GetNumberOfBits(), IDS.currentExtractedBits, IDS.currentRemainingValue )
 			local itemBitWidth = IDS:ExtractValue( 5 )
-			local idx = IDS:ExtractValue( 3 )
-			while idx do
+			for idx = 0, #modList do
 				local itemCount = IDS:ExtractValue( 8 )
-				for i = 1,( itemCount or 0) do
+				-- print( "--bits:", IDS:GetNumberOfBits(), IDS.currentExtractedBits, IDS.currentRemainingValue )
+				for i = 1,( itemCount or 0 ) do
 					itemID = IDS:ExtractValue( itemBitWidth )
+					-- print( "---bits:", IDS:GetNumberOfBits(), IDS.currentExtractedBits, IDS.currentRemainingValue )
 					HS_settings.tags[newTag][modList[idx]] = HS_settings.tags[newTag][modList[idx]] or {}
 					table.insert( HS_settings.tags[newTag][modList[idx]], itemID )
 				end
-				idx = IDS:ExtractValue( 3 )  -- sets to nil if no more data
 			end
 		end
 		HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
 		UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, newTag )
 		HSConfig_TagEditBox:SetText( newTag )
+		HS.UpdateUI()
 	end
 end

@@ -291,6 +291,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Link"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.ExportLink()</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -335,6 +336,7 @@
 				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
 				<Scripts>
 					<OnShow>self:SetText(HS.L["New"])</OnShow>
+					<OnLoad>self:SetAutoFocus( false )</OnLoad>
 				</Scripts>
 			</EditBox>
 			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
