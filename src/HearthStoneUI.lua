@@ -272,6 +272,7 @@ function HS.ExportOnClick()
 	HSImport:Hide()
 	HSExport_EditBox:SetText(HS.BuildExportString())
 	HSExport_EditBox:HighlightText()
+	HSExport_EditBox:SetFocus()
 	HSExport:Show()
 end
 function HS.ExportLink()
