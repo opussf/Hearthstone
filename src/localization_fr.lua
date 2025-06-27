@@ -18,7 +18,7 @@ if GetLocale() == "frFR" then
 	L.L["Post"] = "Publier"
 	L.L["Print this help."] = "Afficher cette aide."
 	L.L["Rename"] = "Renommer"
-	L.L["Toy Box"] = "Boîte à jouets"
+	L.L["Toy Box"] = "Coffre à jouets"
 	L.L["Update macro."] = "Mettre à jour la macro."
 	L.L["update"] = "mise à jour"
 end

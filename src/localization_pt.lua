@@ -18,7 +18,7 @@ if GetLocale() == "ptBR" then
 	L.L["Post"] = "Postar"
 	L.L["Print this help."] = "Mostrar esta ajuda."
 	L.L["Rename"] = "Renomear"
-	L.L["Toy Box"] = "Caixa de Brinquedos"
+	L.L["Toy Box"] = "Brinquedos"
 	L.L["Update macro."] = "Atualizar macro."
 	L.L["update"] = "atualizar"
 end
