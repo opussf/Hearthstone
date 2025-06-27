@@ -263,7 +263,7 @@
 						<Anchor point="BOTTOMLEFT" x="5" y="0"/>
 					</Anchors>
 					<Scripts>
-						<OnLoad>self:SetText(HS.L["Ctrl-C to copy export string to clipboard."])</OnLoad>
+						<OnLoad>self:SetText(HS.L["Copy the export string to share or save it."])</OnLoad>
 					</Scripts>
 				</FontString>
 			</Layer>
@@ -275,6 +275,10 @@
 					<Anchor point="TOPLEFT" x="5"/>
 				</Anchors>
 				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+				<Scripts>
+					<OnLoad>self:SetAutoFocus( false )</OnLoad>
+					<OnShow>self:SetFocus()</OnShow>
+				</Scripts>
 			</EditBox>
 			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
 				<Anchors>
@@ -290,7 +294,7 @@
 					<Anchor point="RIGHT" relativeTo="$parent_Close" relativePoint="LEFT" x="-10"/>
 				</Anchors>
 				<Scripts>
-					<OnLoad>self:SetText(HS.L["Link"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnLoad>self:SetText(HS.L["Post"]);HS.UIAdjustButton(self)</OnLoad>
 					<OnClick>HS.ExportLink()</OnClick>
 				</Scripts>
 			</Button>
@@ -315,7 +319,7 @@
 						<Anchor point="BOTTOM" x="0" y="5"/>
 					</Anchors>
 					<Scripts>
-						<OnLoad>self:SetText(HS.L["New #hash name on the left, and paste export string above."])</OnLoad>
+						<OnLoad>self:SetText(HS.L["New #hash on the left, export string above."])</OnLoad>
 					</Scripts>
 				</FontString>
 			</Layer>
@@ -327,6 +331,10 @@
 					<Anchor point="TOPLEFT" x="5"/>
 				</Anchors>
 				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+				<Scripts>
+					<OnLoad>self:SetAutoFocus( false )</OnLoad>
+					<OnShow>self:SetFocus()</OnShow>
+				</Scripts>
 			</EditBox>
 			<EditBox name="$parent_TagEditBox" inherits="InputBoxTemplate" multiLine="false">
 				<Size x="100" y="20"/>
@@ -360,7 +368,6 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>self:Hide()</OnLoad>
-			<OnShow></OnShow>
 		</Scripts>
 	</Frame>
 </Ui>

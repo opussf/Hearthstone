@@ -13,9 +13,9 @@ function HS.ShowConfig()
 		end
 	end, HS_SLUG )
 end
-HS.commandList["config"] = {
+HS.commandList[HS.L["config"]] = {
 	["func"] = HS.ShowConfig,
-	["help"] = {"", "Config"}
+	["help"] = {"", HS.L["config"]}
 }
 
 function HS.UIInit()
@@ -116,6 +116,7 @@ function HS.TagButtonOnClick( self, action )
 			-- print( "delete:", selectedTag )
 			HS_settings.tags[selectedTag] = nil
 			HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+			HS.UpdateUI()
 		end
 	end
 end
@@ -275,7 +276,8 @@ function HS.ExportOnClick()
 	C_Timer.After(20, function() HSExport:Hide(); end)
 end
 function HS.ExportLink()
-	ChatFrame_OpenChat("Your message here")
+	local exportHash = HS.BuildExportString() -- rebuilt in case the editbox is corrupted
+	ChatFrame_OpenChat( string.format( "HearthStone Import: %s", exportHash ) )
 end
 ---------
 function HS.ImportOnClick()
