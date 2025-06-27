@@ -38,6 +38,7 @@ dataEntries = {
 
 
 dataEntries = {
+    { value=20, bitWitdh=5 }, -- bitSize
     { value=0, bitWidth=3 }, -- index
     { value=11, bitWidth=8 }, -- count
     { value=166747, bitWidth=20 },
@@ -240,6 +241,41 @@ end
 
 
 
+
+
+
+-----
+DressUpFrames.xml   -  Link button:
+            <DropdownButton parentKey="LinkButton" mixin="DressUpModelFrameLinkButtonMixin" inherits="UIPanelButtonTemplate" text="LINK_TRANSMOG_OUTFIT">
+                <KeyValues>
+                    <KeyValue key="menuPointX" type="number" value="15"/>
+                    <KeyValue key="menuPointY" type="number" value="2"/>
+                </KeyValues>
+                <Size x="159" y="22"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="2" y="4"/>
+                </Anchors>
+                <Scripts>
+                    <OnShow method="OnShow"/>
+                    <OnHide method="OnHide"/>
+                    <OnClick method="OnClick"/>
+                </Scripts>
+            </DropdownButton>
+
+
+-- detect ctrl-c
+
+local editbox = CreateFrame("EditBox", nil, UIParent, "InputBoxTemplate")
+editbox:SetAutoFocus(true)
+editbox:SetSize(300, 40)
+editbox:SetPoint("CENTER")
+editbox:SetScript("OnKeyDown", function(self, key)
+    if IsControlKeyDown() then
+        print("Control is being held")
+    end
+    print("Key pressed:", key)
+end)
+editbox:EnableKeyboard(true)
 
 
 

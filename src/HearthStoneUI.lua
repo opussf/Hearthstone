@@ -239,3 +239,13 @@ end
 function HS.UIAdjustButton( self )
 	self:SetWidth( self.Text:GetStringWidth() + 24 )
 end
+-------
+function HS.BuildExportString()
+
+end
+function HS.ExportOnClick()
+	HSExport_EditBox:SetText("hello")
+	HSExport_EditBox:HighlightText()
+	HSExport:Show()
+	C_Timer.After(15, function() HSExport:Hide(); end)
+end

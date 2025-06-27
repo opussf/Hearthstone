@@ -222,7 +222,7 @@
 			</EditBox>
 			<Button name="$parent_Import" inherits="UIPanelButtonTemplate">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeTo="$parent" x="-50" y="-84"/>
+					<Anchor point="TOPRIGHT" relativeTo="$parent" x="-38" y="-84"/>
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Import"]);HS.UIAdjustButton(self)</OnLoad>
@@ -234,6 +234,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Export"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.ExportOnClick()</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -243,7 +244,106 @@
 			<OnReceiveDrag>HS.UIOnReceiveDrag( self )</OnReceiveDrag>
 			<OnMouseDown>HS.UIOnMouseDown()</OnMouseDown>
 			<OnMouseUp>HS.UIOnMouseUp()</OnMouseUp>
-			<OnHide>HS.UIOnHide()</OnHide>
+			<OnHide>HS.UIOnHide();HSExport:Hide()</OnHide>
+		</Scripts>
+	</Frame>
+	<Frame name="HSExport" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+		<Size x="600" y="50"/>
+		<Anchors>
+			<Anchor point="TOP" relativeTo="HSConfig" relativePoint="BOTTOM"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture setAllPoints="true">
+					<Color r="0" g="0" b="0"/>
+				</Texture>
+				<FontString name="$parent_kjshdfkjh" inherits="GameFontWhite" justifyH="LEFT" text="Ctrl-C to copy export to clipboard.">
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="5" y="0"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<EditBox name="$parent_EditBox" inherits="InputBoxTemplate" multiLine="false">
+				<Size x="590" y="20"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5"/>
+				</Anchors>
+				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+				<Scripts>
+					<OnKeyDown></OnKeyDown>
+				</Scripts>
+			</EditBox>
+			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="$parent"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Close"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>self:GetParent():Hide()</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parent_ExportLink" inherits="UIPanelButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent_Close" relativePoint="LEFT" x="-10"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Link"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick></OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>self:Hide()</OnLoad>
+			<OnShow></OnShow>
 		</Scripts>
 	</Frame>
 </Ui>
+
+
+<!--
+
+		<Frame name="RestedCSV" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+		<Size x="600" y="50"/>
+		<Anchors><Anchor point="CENTER"/></Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture setAllPoints="true">
+					<Color r="0" g="0" b="0"/>
+				</Texture>
+				<FontString name="$parent_FormatStringHelp" inherits="GameFontWhite" justifyH="LEFT" text="Ctrl-C to copy CSV contents to clipboard.">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset><AbsDimension x="5"/></Offset>
+					</Anchor>
+				</Anchors>
+			</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<EditBox name="$parent_EditBox" inherits="InputBoxTemplate" multiLine="false">
+				<Size x="590" y="20"/>
+				<Anchors>
+					<Anchor point="TOPLEFT"><Offset x="5"/></Anchor>
+				</Anchors>
+				<FontString name="CSVFont" inherits="ChatFontNormal"/>
+			</EditBox>
+
+			<Button name="$parent_Close" inherits="UIPanelButtonTemplate" text="Close">
+				<Size><AbsDimension x="120" y="24"/></Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>RestedCSV:Hide();</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>self:Hide();</OnLoad>
+		</Scripts>
+	</Frame>
+	-->
