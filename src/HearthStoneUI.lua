@@ -241,11 +241,44 @@ function HS.UIAdjustButton( self )
 end
 -------
 function HS.BuildExportString()
-
+	local hashStruct = HS_settings.tags[UIDropDownMenu_GetText( HSConfig_TagDropDownMenu )]
+	local modList = { [0]="normal" }
+	for _, mod in ipairs( HS.modOrder ) do
+		table.insert( modList, mod )
+	end
+	local itemBitWidth=1
+	local dataEntries = { { value=itemBitWidth, bitWidth=5 } }  -- come back and set this with the right bitWidth
+	local l2 = math.log(2)
+	for idx = 0, #modList do
+		table.insert( dataEntries, { value=idx, bitWidth=3 } )  -- only need 3 bits for the size of the combos
+		local itemCount = ( hashStruct[modList[idx]] and #hashStruct[modList[idx]] or 0 )
+		table.insert( dataEntries, { value=itemCount, bitWidth=8 } )  -- 8 bits (0-255)
+		if itemCount > 0 then
+			for _, itemID in ipairs( hashStruct[modList[idx]] ) do
+				itemID = tonumber( itemID )
+				itemBitWidth = math.max( itemBitWidth, math.log( itemID )/l2 )
+				table.insert( dataEntries, { value=itemID, bitWidth=0 } )
+			end
+		end
+	end
+	itemBitWidth = math.ceil( itemBitWidth )
+	dataEntries[1].value = itemBitWidth
+	for _, struct in ipairs( dataEntries ) do
+		if struct.bitWidth == 0 then
+			struct.bitWidth = itemBitWidth
+		end
+	end
+	return ExportUtil.ConvertToBase64( dataEntries )
 end
 function HS.ExportOnClick()
-	HSExport_EditBox:SetText("hello")
+	HSImport:Hide()
+	HSExport_EditBox:SetText(HS.BuildExportString())
 	HSExport_EditBox:HighlightText()
 	HSExport:Show()
 	C_Timer.After(15, function() HSExport:Hide(); end)
+end
+---------
+function HS.ImportOnClick()
+	HSExport:Hide()
+	HSImport:Show()
 end

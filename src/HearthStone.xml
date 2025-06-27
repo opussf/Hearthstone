@@ -226,6 +226,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Import"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>HS.ImportOnClick()</OnClick>
 				</Scripts>
 			</Button>
 			<Button name="$parent_Export" inherits="UIPanelButtonTemplate">
@@ -271,9 +272,6 @@
 					<Anchor point="TOPLEFT" x="5"/>
 				</Anchors>
 				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
-				<Scripts>
-					<OnKeyDown></OnKeyDown>
-				</Scripts>
 			</EditBox>
 			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
 				<Anchors>
@@ -290,7 +288,41 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>self:SetText(HS.L["Link"]);HS.UIAdjustButton(self)</OnLoad>
-					<OnClick></OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>self:Hide()</OnLoad>
+			<OnShow></OnShow>
+		</Scripts>
+	</Frame>
+	<Frame name="HSImport" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+		<Size x="600" y="50"/>
+		<Anchors>
+			<Anchor point="TOP" relativeTo="HSConfig" relativePoint="BOTTOM"/>
+		</Anchors>
+		<Frames>
+			<EditBox name="$parent_EditBox" inherits="InputBoxTemplate" multiLine="false">
+				<Size x="590" y="20"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5"/>
+				</Anchors>
+				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+			</EditBox>
+			<EditBox name="$parent_TagEditBox" inherits="InputBoxTemplate" multiLine="false">
+				<Size x="100" y="20"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="5"/>
+				</Anchors>
+				<FontString name="$parent_FontString" inherits="ChatFontNormal"/>
+			</EditBox>
+			<Button name="$parent_Close" inherits="UIPanelButtonTemplate">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="$parent"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText(HS.L["Close"]);HS.UIAdjustButton(self)</OnLoad>
+					<OnClick>self:GetParent():Hide()</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
