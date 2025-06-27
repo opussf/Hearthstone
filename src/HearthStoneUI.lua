@@ -292,6 +292,7 @@ function HS.ImportFromString()
 			newTag = "#"..newTag
 		end
 		if not HS_settings.tags[newTag] then
+			local itemID
 			HS_settings.tags[newTag] = {}
 			local IDS = ImportDataStreamMixin
 			IDS:Init( importString )
@@ -299,8 +300,7 @@ function HS.ImportFromString()
 			local idx = IDS:ExtractValue( 3 )
 			while idx do
 				local itemCount = IDS:ExtractValue( 8 )
-				local itemID
-				for i = 1,itemCount do
+				for i = 1,( itemCount or 0) do
 					itemID = IDS:ExtractValue( itemBitWidth )
 					HS_settings.tags[newTag][modList[idx]] = HS_settings.tags[newTag][modList[idx]] or {}
 					table.insert( HS_settings.tags[newTag][modList[idx]], itemID )
