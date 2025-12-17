@@ -5,6 +5,7 @@ require "wowTest"
 
 test.outFileName = "testOut.xml"
 test.coberturaFileName = "../coverage.xml"
+test.coverageReportPercent = true
 
 -- require the file to test
 ParseTOC( "../src/HearthStone.toc" )
