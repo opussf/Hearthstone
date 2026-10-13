@@ -1124,14 +1124,6 @@ function GetItemCount( itemID, includeBank, includeUses, includeReagentBank, inc
 	-- print( itemID, myInventory[itemID] )
 	return myInventory[itemID] or 0
 end
-function GetItemInfo( itemIn )
-	-- itemID is number, link or 'item:#####'
-	-- returns name, itemLink
-	local itemID = __getItemID( itemIn )
-	if Items[itemID] then
-		return Items[itemID].name, Items[itemID].link
-	end
-end
 function GetLocale()
 	return myLocale
 end
@@ -2116,6 +2108,14 @@ end
 function C_Item.IsBound( itemLocation )
 	return false
 end
+function C_Item.GetItemInfo( itemIn )
+	-- itemID is number, link or 'item:#####'
+	-- returns name, itemLink
+	local itemID = __getItemID( itemIn )
+	if Items[itemID] then
+		return Items[itemID].name, Items[itemID].link
+	end
+end
 
 ----------
 -- Menu
@@ -2546,6 +2546,13 @@ end
 function C_Garrison.GetPendingShipmentInfo( index )
 	-- returns
 	return "herbs", 263455, 1, 238763, "nil", 14400, C_Garrison.testData[C_Garrison.plotID].shipments[index]
+end
+
+--------
+-- C_HousingCatalog
+--------
+C_HousingCatalog = {}
+function C_HousingCatalog.GetCatalogEntryInfoByItem( itemID )
 end
 
 --------
