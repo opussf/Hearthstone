@@ -23,13 +23,14 @@
 ## Category-ruRU: Коллекции отряда
 ## SavedVariables: HS_settings HS_log
 ## SavedVariablesPerCharacter:
-localization_core.lua
-localization_de.lua
-localization_es.lua
-localization_fr.lua
-localization_it.lua
-localization_pt.lua
-localization_ru.lua
+
+localization/core.lua
+localization/de.lua
+localization/es.lua
+localization/fr.lua
+localization/it.lua
+localization/pt.lua
+localization/ru.lua
 
 HearthStone.lua
 HearthStoneUI.lua
