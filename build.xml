@@ -22,7 +22,7 @@
 			<length string="${git.revision}" trim="yes" length="0" when="greater"/>
 		</and>
 	</condition>
-	<!-- find gitbranch -->
+
 	<!-- find gitbranch -->
 	<exec executable="git" dir="." outputproperty="git.branch.tmp" failifexecutionfails="false" errorproperty="">
 		<arg line="rev-parse --abbrev-ref HEAD"/>
@@ -67,6 +67,19 @@
 	<filter token="VERSION" value="${version.number}"/>
 	<filter token="INTERFACE" value="${INTERFACE}"/>
 
+	<patternset id="packageFiles">
+		<include name="**/*.xml"/>
+		<include name="**/*.toc"/>
+		<include name="**/*.lua"/>
+		<include name="Readme.txt"/>
+		<include name="HowTo.md"/>
+		<include name="../${working.dir}/*.txt"/>
+	</patternset>
+	<patternset id="imgFiles">
+		<include name="**/*.tga"/>
+	</patternset>
+
+<!-- -->
 	<target name="clean" description="Cleans old builds">
 		<delete dir="target" verbose="true"/>
 	</target>
@@ -85,13 +98,17 @@
 		<delete dir="${package.dir}" verbose="false"/>
 		<copy	todir="${package.dir}" filtering="true">
 			<fileset dir="src">
-				<include name="**/*.lua"/>
-				<include name="**/*.toc"/>
-				<include name="**/*.xml"/>
-				<include name="**/*.txt"/>
+				<patternset refid="packageFiles"/>
 			</fileset>
-			<fileset dir="${working.dir}">
-				<include name="*.txt"/>
+		</copy>
+		<copy   todir="${package.dir}" filtering="false">
+			<fileset dir="src">
+				<patternset refid="imgFiles"/>
+			</fileset>
+		</copy>
+		<copy   todir="${package.dir}">
+			<fileset dir=".">
+				<include name="LICENSE*"/>
 			</fileset>
 		</copy>
 		<zip 	destfile="${target.dir}/${project.zip}"
@@ -109,10 +126,12 @@
 		</delete>
 		<copy todir="${addon.dir}" filtering="true" verbose="true">
 			<fileset dir="src">
-				<include name="*.lua"/>
-				<include name="*.toc"/>
-				<include name="*.xml"/>
-				<include name="Readme.txt"/>
+				<patternset refid="packageFiles"/>
+			</fileset>
+		</copy>
+		<copy todir="${addon.dir}" filtering="false" verbose="true">
+			<fileset dir="src">
+				<patternset refid="imgFiles"/>
 			</fileset>
 		</copy>
 		<echo>Deployed ${version.number} locally</echo>
@@ -130,7 +149,7 @@
 			<arg value="test.lua"/>
 		</exec>
 		<move todir="${report.dir}" file="${test.dir}/testOut.xml"/>
-		<fail message="The tests failed. Please see the output for details.">
+		<fail message="The tests failed. Please see the output for details." status="${testResult}">
 			<condition>
 				<not>
 					<equals arg1="${testResult}" arg2="0"/>
@@ -139,12 +158,15 @@
 		</fail>
 	</target>
 
-	<target name="curse" depends="package" description="copy files to a folder for deploy to curseforge">
+	<target name="curse" depends="clean, package" description="Copy files to the local curseforge path">
 		<property name="curse.dir" location="${ant.project.name}-cf"/>
 		<exec executable="git" dir="${curse.dir}" failifexecutionfails="true" errorproperty="">
 			<arg line="reset --hard HEAD" />
 		</exec>
-		<copy todir="${curse.dir}">
+		<exec executable="git" dir="${curse.dir}" failifexecutionfails="true" errorproperty="">
+			<arg line="rm -rf ." />
+		</exec>
+		<copy todir="${curse.dir}" verbose="true">
 			<fileset dir="${package.dir}"/>
 		</copy>
 		<exec executable="git" dir="${curse.dir}" failifexecutionfails="true" errorproperty="">
