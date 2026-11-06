@@ -165,7 +165,7 @@ function HS.UpdateMacros()
 			HS.macroTable = {}
 			HS.ListToTable( body, HS.macroTable )
 			for lnum, line in ipairs( HS.macroTable ) do
-				s, e, hash = strfind( line, "(#%S+)$" )
+				local s, e, hash = strfind( line, "(#%S+)$" )
 				if hash and not HS.hashIgnore[hash] and HS_settings.tags[hash] then
 					-- HS.LogMsg( lnum.."> "..line.." "..(s or "").."->"..(e or "").."="..(hash or "nil") )
 					HS.macroTable[lnum] = HS.MakeUseLine( hash )

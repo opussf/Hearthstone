@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 require "wowTest"
---myLocale = "esMX"
+-- myLocale = "esMX"
 
 test.outFileName = "testOut.xml"
 test.coberturaFileName = "../coverage.xml"
@@ -45,38 +45,38 @@ end
 function test.test_help()
 -- 	-- going to be hard to test unless the help (print) gets captured
 -- 	-- for now, at least no errors are thrown
-	HS.Command( "help" )
+	HS.Command( HS.L["help"] )
 end
 function test.test_update_simple()
 	HS_settings.tags["#hs"].normal[1] = "165670"
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( "/use item:165670#hs", myMacros.general[1].text )
 end
 function test.test_update_show()
 	HS_settings.tags["#hs"].normal[1] = "165670"
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#show spell name\n#hs" } }  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( "#show spell name\n/use item:165670#hs", myMacros.general[1].text )
 end
 function test.test_update_showtooltip()
 	HS_settings.tags["#hs"].normal[1] = "165670"
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#showtooltip\n#hs" } }  -- [1] = { ["name"] = "", ["icon"] = "", ["text"] = "" }   1-120 = general
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( "#showtooltip\n/use item:165670#hs", myMacros.general[1].text )
 end
 function test.test_update_complex()
 	HS_settings.tags["#hs"].normal[1] = "5567"
 	HS_settings.tags["#hs"]["alt"] = { "1234" }
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( "/use [mod:alt]item:1234;item:5567#hs", myMacros.general[1].text )
 end
 function test.test_update_complex_withMultiple()
 	HS_settings.tags["#hs"].normal[1] = "5567"
 	HS_settings.tags["#hs"]["alt"] = { "1234","7777" }
 	myMacros.general = { { ["name"] = "H", ["icon"] = "", ["text"] = "#hs" } }
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertTrue( myMacros.general[1].text == "/use [mod:alt]item:1234;item:5567#hs"
 			or myMacros.general[1].text == "/use [mod:alt]item:7777;item:5567#hs" )
 end
@@ -86,14 +86,14 @@ function test.test_update_seeds()
 	myMacros.general = { { ["name"] = "seeds", ["icon"] = "",
 			["text"] = "#longmacro\n#showtooltip\n/click [btn:5]LongMacro_LM-Seeds Button5; [btn:4]LongMacro_LM-Seeds Button4; [btn:3]LongMacro_LM-Seeds MiddleButton; [btn:2]LongMacro_LM-Seeds RightButton; LongMacro_LM-Seeds\n"
 	} }
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( "#longmacro\n#showtooltip\n/click [btn:5]LongMacro_LM-Seeds Button5; [btn:4]LongMacro_LM-Seeds Button4; [btn:3]LongMacro_LM-Seeds MiddleButton; [btn:2]LongMacro_LM-Seeds RightButton; LongMacro_LM-Seeds",
 			myMacros.general[1].text
 	)
 end
 function test.test_update_inCombat()
 	HS.PLAYER_REGEN_DISABLED()
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertTrue( HS.combatUpdate )
 end
 function test.test_update_afterCombat()
@@ -115,7 +115,7 @@ function test.test_long_macro_old_method_does_not_destroy()
 	myMacros.general = { { ["name"] = "testmacro", ["icon"] = "",
 		["text"] = "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:1234#hs\n0123456789012345678901234567890\n2345"
 	} }
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( 255, string.len( myMacros.general[1].text ) )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ) )
 end
@@ -123,14 +123,14 @@ function test.test_long_macro_post_edit_works_ok()
 	myMacros.general = { { ["name"] = "testmacro", ["icon"] = "",
 		["text"] = "1234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n234567890123456789012345678901234567890\n/use item:4321#hs\n123456789012345678901234567890\n12345"
 	} }
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( 255, string.len( myMacros.general[1].text ) )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ) )
 	assertTrue( string.find( myMacros.general[1].text, "12345$" ) )
 end
 function test.test_old_macro_to_new_macro_is_weird()
 	CreateMacro( "testmacro", "", "#showtooltip\n#hs\n/use item:1234" )
-	HS.Command( "update" )
+	HS.Command( HS.L["update"] )
 	assertEquals( 45, string.len( myMacros.general[1].text ), "New macro should be longer." )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:1234" ), "/use item:1234 should still be here." )
 	assertTrue( string.find( myMacros.general[1].text, "/use item:6948" ), "/use item:6948 should now be inserted." )
